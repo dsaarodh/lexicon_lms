@@ -1,2 +1,2 @@
-# lexicon_lms
+# Lexicon LMS
 Slutuppgift C#-fördjupning hos Lexicon
