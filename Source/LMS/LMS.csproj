@@ -204,6 +204,7 @@
       <DependentUpon>201711241308545_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CourseModel.cs" />
     <Compile Include="ViewModels\Identity\AccountViewModels.cs" />
     <Compile Include="DataAccess\ApplicationDbContext.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
