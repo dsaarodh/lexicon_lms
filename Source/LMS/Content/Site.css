@@ -47,11 +47,10 @@ textarea {
     width: 100%;
 }
 
-    .schemaTbl td {
-        border: 1px solid black;
-        padding: 2px 10px;
-    }
-
+.schemaTbl td {
+    border: 1px solid black;
+    padding: 2px 10px;
+}
 
 .tab-content {
     border: 1px solid #dddddd;
@@ -62,4 +61,8 @@ textarea {
     background-color: #eeeeee;
     color: black;
     font-weight: bold;
+}
+
+.body-content {
+    margin-top: 10px;
 }

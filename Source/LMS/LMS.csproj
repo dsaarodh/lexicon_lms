@@ -208,7 +208,7 @@
     <Compile Include="DataAccess\ApplicationDbContext.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
     <Compile Include="ViewModels\Identity\ManageViewModels.cs" />
-	<Compile Include="Models\StudentViewModels.cs" />
+    <Compile Include="ViewModels\StudentViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
