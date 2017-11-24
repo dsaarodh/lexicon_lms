@@ -7,8 +7,10 @@ namespace LMS.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+	using LMS.DataAccess;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<LMS.DataAccess.ApplicationDbContext>
+
+	internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -16,7 +18,7 @@ namespace LMS.Migrations
             ContextKey = "LMS.DataAccess.ApplicationDbContext";
         }
 
-        protected override void Seed(LMS.DataAccess.ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
             //  This method will be called after migrating to the latest version.
 
