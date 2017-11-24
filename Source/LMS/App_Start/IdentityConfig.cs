@@ -10,7 +10,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
-using LMS.Models;
+using LMS.DataAccess;
+using LMS.Models.Identity;
 
 namespace LMS
 {
