@@ -1,4 +1,5 @@
 ﻿@model LMS.ViewModels.Identity.IndexViewModel
+@using Microsoft.AspNet.Identity
 @{
     ViewBag.Title = "Manage";
 }
@@ -56,6 +57,22 @@
                 }
             </dd>
         *@
+
+        <dt>User role:</dt>
+        <dd>
+            @if (Request.IsAuthenticated)
+            {
+                if (User.IsInRole("Student"))
+                { <p>Student</p>}
+                if (User.IsInRole("Teacher"))
+                { <p>Teacher</p>}
+            }
+            else
+            {
+                <p>Not logged in</p>
+            }
+        </dd>
+
         <dt>Two-Factor Authentication:</dt>
         <dd>
             <p>
