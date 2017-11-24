@@ -10,8 +10,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using LMS.DataAccess;
 using LMS.ViewModels;
-using LMS.Models.Identity;
 using LMS.ViewModels.Identity;
+using LMS.Models.Identity;
 
 namespace LMS.Controllers
 {
