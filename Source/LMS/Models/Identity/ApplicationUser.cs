@@ -22,4 +22,5 @@ namespace LMS.Models.Identity
             return userIdentity;
         }
     }
+
 }

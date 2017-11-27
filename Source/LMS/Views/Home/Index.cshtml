@@ -1,4 +1,14 @@
-﻿<ul class="nav nav-tabs">
+﻿@using LMS.Controllers
+@if (Request.IsAuthenticated)
+{
+    if (User.IsInRole(Role.Student))
+        { <p>@Role.Student</p>}
+    else if (User.IsInRole(Role.Teacher))
+        { <p>@Role.Teacher</p>}
+}
+
+
+<ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#schema">Veckoschema</a></li>
     <li><a data-toggle="tab" href="#modules">Moduler</a></li>
     <li><a data-toggle="tab" href="#info">Kursinfo</a></li>

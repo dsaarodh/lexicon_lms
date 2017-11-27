@@ -8,6 +8,7 @@ namespace LMS.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 	using LMS.DataAccess;
+    using LMS.Controllers;
     using LMS.Models;
 
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
@@ -25,7 +26,7 @@ namespace LMS.Migrations
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
 
-            var roleNames = new[] { "Student", "Teacher" };
+            var roleNames = new[] { Role.Student, Role.Teacher };
 
             foreach (var roleName in roleNames)
             {
