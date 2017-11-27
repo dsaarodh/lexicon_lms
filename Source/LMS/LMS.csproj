@@ -193,6 +193,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Controllers\Role.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -200,11 +201,22 @@
     <Compile Include="Migrations\201711241242393_InitialCreate.Designer.cs">
       <DependentUpon>201711241242393_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711241308545_Initial.cs" />
+    <Compile Include="Migrations\201711241308545_Initial.Designer.cs">
+      <DependentUpon>201711241308545_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201711271031386_Courses_and_Modules.cs" />
+    <Compile Include="Migrations\201711271031386_Courses_and_Modules.Designer.cs">
+      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\CourseModel.cs" />
+    <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="ViewModels\Identity\AccountViewModels.cs" />
     <Compile Include="DataAccess\ApplicationDbContext.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
     <Compile Include="ViewModels\Identity\ManageViewModels.cs" />
+    <Compile Include="ViewModels\StudentViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Widgets\TreeViewModel.cs" />
@@ -292,6 +304,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201711241242393_InitialCreate.resx">
       <DependentUpon>201711241242393_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711241308545_Initial.resx">
+      <DependentUpon>201711241308545_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711271031386_Courses_and_Modules.resx">
+      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
