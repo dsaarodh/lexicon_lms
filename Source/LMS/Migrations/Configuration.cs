@@ -23,6 +23,256 @@ namespace LMS.Migrations
         {
             //  This method will be called after migrating to the latest version.
 
+            // Courses
+            var courses = new[]
+            {
+                new Course
+                {
+                    Name = ".NET-utbildning Hösten 2017",
+                    Description = "MVC.NET kurs",
+                    StartDate = new DateTime(2017, 08, 28),
+                    EndDate = new DateTime(2017, 12, 15)
+                },
+                new Course
+                {
+                    Name = "Java för Pingviner 2017",
+                    Description = "Grundläggande java utbildning för ungfåglar",
+                    StartDate = new DateTime(2017, 05, 01),
+                    EndDate = new DateTime(2017, 12, 20)
+                },
+            };
+
+            foreach (var course in courses)
+            {
+                if (context.Courses.Any(c => c.Name == course.Name)) continue;
+
+                context.Courses.AddOrUpdate(course);
+            }
+            context.SaveChanges();
+
+
+            // Modules
+
+            var modules = new[]
+            {
+                new Module
+                {
+                    Name = "C# Intro",
+                    Description = "Introduktion till C#",
+                    StartDate = new DateTime(2017, 8 , 30, 00, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 14, 00, 00, 00),
+                    CourseId = courses[0].Id
+                },
+                new Module
+                {
+                    Name = "Övning 2",
+                    Description = "Bygg ett garage för fordon",
+                    StartDate = new DateTime(2017, 9 , 15, 00, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 29, 00, 00, 00),
+                    CourseId = courses[0].Id
+                },
+                new Module
+                {
+                    Name = "C# Grund",
+                    Description = "Klasser och arv",
+                    StartDate = new DateTime(2017, 10 , 1, 00, 00, 00),
+                    EndDate =  new DateTime(2017, 10 , 14, 00, 00, 00),
+                    CourseId = courses[0].Id
+                },
+                new Module
+                {
+                    Name = "Java introduktion",
+                    Description = "Nybörjarlektion",
+                    StartDate = new DateTime(2017, 5, 3, 00, 00, 00),
+                    EndDate =  new DateTime(2017, 5, 17, 00, 00, 00),
+                    CourseId = courses[1].Id
+                },
+                new Module
+                {
+                    Name = "Övning 1",
+                    Description = "Garage övning",
+                    StartDate = new DateTime(2017, 8 , 1, 00, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 17, 00, 00, 00),
+                    CourseId = courses[1].Id
+                },
+            };
+
+            foreach (var module in modules)
+            {
+                if (context.Modules.Any(m => m.Name == module.Name)) continue;
+
+                context.Modules.AddOrUpdate(module);
+            }
+            context.SaveChanges();
+
+
+
+            // ActivityTypes
+            var activityTypes = new []
+            {
+                new ActivityType
+                {
+                    Name = "E-learning"
+                },
+                new ActivityType
+                {
+                    Name = "Lecture"
+                },
+                new ActivityType
+                {
+                    Name = "Workshop"
+                },
+                new ActivityType
+                {
+                    Name = "Assignment"
+                }
+            };
+
+            foreach (var activityType in activityTypes)
+            {
+                if (context.ActivityTypes.Any(at => at.Name == activityType.Name)) continue;
+
+                context.ActivityTypes.AddOrUpdate(activityType);
+            }
+            context.SaveChanges();
+
+
+
+            // Activiteter
+
+            var activities = new[]
+            {
+                new Activity
+                {
+                    Name = "C# Intro 1",
+                    Description = "Introduktion till C#",
+                    StartDate = new DateTime(2017, 8 , 30, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 8 , 30, 12, 00, 00),
+                    ModuleId = modules[0].Id,
+                    ActivityTypeId = activityTypes[0].Id
+                },
+                new Activity
+                {
+                    Name = "C# Intro 2",
+                    Description = "Introduktion till C#",
+                    StartDate = new DateTime(2017, 8 , 30, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 30, 17, 00, 00),
+                    ModuleId = modules[0].Id,
+                    ActivityTypeId = activityTypes[0].Id
+                },
+                new Activity
+                {
+                    Name = "C# Intro 3",
+                    Description = "E-learning kapitel 1.1, 1.2",
+                    StartDate = new DateTime(2017, 9 , 4,  13, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 4, 17, 00, 00),
+                    ModuleId = modules[0].Id,
+                    ActivityTypeId = activityTypes[0].Id
+                },
+                new Activity
+                {
+                    Name = "C# Intro 4",
+                    Description = "E-Learning kapitel 1.3",
+                    StartDate = new DateTime(2017, 9 , 6,  8, 30, 00),
+                    EndDate =  new DateTime(2017, 9 , 6, 12, 00, 00),
+                    ModuleId = modules[0].Id,
+                    ActivityTypeId = activityTypes[0].Id
+                },
+                new Activity
+                {
+                    Name = "C# Intro 5",
+                    Description = "E-Learning kapitel 1.4, 1.5",
+                    StartDate = new DateTime(2017, 9 , 12,  13, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 12, 17, 00, 00),
+                    ModuleId = modules[0].Id,
+                    ActivityTypeId = activityTypes[0].Id
+                },
+                new Activity
+                {
+                    Name = "Övning 2-1",
+                    Description = "Bygg ett garage för fordon",
+                    StartDate = new DateTime(2017, 9 , 15, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 9 , 15, 12, 00, 00),
+                    ModuleId = modules[1].Id,
+                    ActivityTypeId = activityTypes[2].Id
+                },
+                new Activity
+                {
+                    Name = "Övning 2-2",
+                    Description = "Bygg ett garage för fordon",
+                    StartDate = new DateTime(2017, 9 , 24, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 24, 17, 00, 00),
+                    ModuleId = modules[1].Id,
+                    ActivityTypeId = activityTypes[2].Id
+                },
+                new Activity
+                {
+                    Name = "C# Grund 1",
+                    Description = "Klasser och arv",
+                    StartDate = new DateTime(2017, 10 , 1, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 10 , 1, 12, 00, 00),
+                    ModuleId = modules[1].Id,
+                    ActivityTypeId = activityTypes[2].Id
+                },
+                new Activity
+                {
+                    Name = "C# Grund 2",
+                    Description = "Klasser och arv",
+                    StartDate = new DateTime(2017, 10, 11, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 10, 11, 17, 00, 00),
+                    ModuleId = modules[2].Id,
+                    ActivityTypeId = activityTypes[1].Id
+                },
+                new Activity
+                {
+                    Name = "Java introduktion 1",
+                    Description = "Nybörjarlektion",
+                    StartDate = new DateTime(2017, 5, 3, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 5, 3, 17, 00, 00),
+                    ModuleId = modules[3].Id,
+                    ActivityTypeId = activityTypes[1].Id
+                },
+                new Activity
+                {
+                    Name = "Java introduktion 2",
+                    Description = "Nybörjarlektion fortsättning",
+                    StartDate = new DateTime(2017, 5, 10, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 5, 10, 17, 00, 00),
+                    ModuleId = modules[3].Id,
+                    ActivityTypeId = activityTypes[1].Id
+                },
+                new Activity
+                {
+                    Name = "Övning 1-1",
+                    Description = "Garage övning",
+                    StartDate = new DateTime(2017, 8, 3, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 8, 3, 17, 00, 00),
+                    ModuleId = modules[4].Id,
+                    ActivityTypeId = activityTypes[2].Id
+                },
+                new Activity
+                {
+                    Name = "Övning 1-2",
+                    Description = "Garage övning",
+                    StartDate = new DateTime(2017, 8, 10, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 8, 10, 17, 00, 00),
+                    ModuleId = modules[4].Id,
+                    ActivityTypeId = activityTypes[2].Id
+                },
+            };
+
+            foreach (var activity in activities)
+            {
+                if (context.Activities.Any(a => a.Name == activity.Name)) continue;
+
+                context.Activities.AddOrUpdate(activity);
+                context.SaveChanges();
+            }
+
+
+
+
+            // Add Roles
             var roleStore = new RoleStore<IdentityRole>(context);
             var roleManager = new RoleManager<IdentityRole>(roleStore);
 
@@ -43,80 +293,92 @@ namespace LMS.Migrations
             var userStore = new UserStore<ApplicationUser>(context);
             var userManager = new UserManager<ApplicationUser>(userStore);
 
+
+            // Add students
             var students = new[] {
                 new ApplicationUser {
                     UserName = "bobbygunnar.nilsson@lexicon.se",
                     Email = "bobbygunnar.nilsson@lexicon.se",
                     FirstName = "Bobby-Gunnar",
                     LastName = "Nilsson",
-                    PersonalIdentityNumber = "19721224-1963"
+                    PersonalIdentityNumber = "19721224-1963",
+                    CourseId = courses[0].Id
+                    
                 },
                 new ApplicationUser {
                     UserName = "bengtelvis.andersson@lexicon.se",
                     Email = "bengtelvis.andersson@lexicon.se",
                     FirstName = "Bengt-Elvis",
                     LastName = "Andersson",
-                    PersonalIdentityNumber = "19901102-2048"
+                    PersonalIdentityNumber = "19901102-2048",
+                    CourseId = courses[0].Id
                 },
                 new ApplicationUser {
                     UserName = "kurtsune.beritsdottir@lexicon.se",
                     Email = "kurtsune.beritsdottir@lexicon.se",
                     FirstName = "Kurt-Sune",
                     LastName = "Beritsdottir",
-                    PersonalIdentityNumber = "19810719-7098"
+                    PersonalIdentityNumber = "19810719-7098",
+                    CourseId = courses[0].Id
                 },
                 new ApplicationUser {
                     UserName = "moa.karlsson@lexicon.se",
                     Email = "moa.karlsson@lexicon.se",
                     FirstName = "Moa",
                     LastName = "Karlsson",
-                    PersonalIdentityNumber = "20010125-4785"
+                    PersonalIdentityNumber = "20010125-4785",
+                    CourseId = courses[0].Id
                 },
                 new ApplicationUser {
                     UserName = "marit.haraldsson@lexicon.se",
                     Email = "marit.haraldsson@lexicon.se",
                     FirstName = "Marit",
                     LastName = "Haraldsson",
-                    PersonalIdentityNumber = "20000403-9046"
+                    PersonalIdentityNumber = "20000403-9046",
+                    CourseId = courses[0].Id
                 },
                 new ApplicationUser {
                     UserName = "beatrice.hansson@lexicon.se",
                     Email = "beatrice.hansson@lexicon.se",
                     FirstName = "Beatrice",
                     LastName = "Hansson",
-                    PersonalIdentityNumber = "20010706-4769"
+                    PersonalIdentityNumber = "20010706-4769",
+                    CourseId = courses[0].Id
                 },
                 new ApplicationUser {
                     UserName = "svante.vantesson@lexicon.se",
                     Email = "svante.vantesson@lexicon.se",
                     FirstName = "Svante",
                     LastName = "Vantesson",
-                    PersonalIdentityNumber = "19851004-3756"
+                    PersonalIdentityNumber = "19851004-3756",
+                    CourseId = courses[1].Id
                 },
                 new ApplicationUser {
                     UserName = "camilla.felg@lexicon.se",
                     Email = "camilla.felg@lexicon.se",
                     FirstName = "Camilla",
                     LastName = "Felg",
-                    PersonalIdentityNumber = "19990822-8459"
+                    PersonalIdentityNumber = "19990822-8459",
+                    CourseId = courses[1].Id
                 },
                 new ApplicationUser {
                     UserName = "pelle.pop@lexicon.se",
                     Email = "pelle.pop@lexicon.se",
                     FirstName = "Pelle",
                     LastName = "Pop",
-                    PersonalIdentityNumber = "19870228-8563"
+                    PersonalIdentityNumber = "19870228-8563",
+                    CourseId = courses[1].Id
                 },
                 new ApplicationUser {
                     UserName = "chuck.norris@lexicon.se",
                     Email = "chuck.norris@lexicon.se",
                     FirstName = "Chuck",
                     LastName = "Norris",
-                    PersonalIdentityNumber = "11920523-4748"
+                    PersonalIdentityNumber = "11920523-4748",
+                    CourseId = courses[1].Id
                 },
             };
 
-            // Add students
             foreach (var student in students)
             {
                 if (context.Users.Any(u => u.UserName == student.Email)) continue;
@@ -132,6 +394,8 @@ namespace LMS.Migrations
             }
 
 
+
+            // Add teachers
             var teachers = new[] {
                 new ApplicationUser {
                     UserName = "lorenzo.larsson@lexicon.se",
@@ -163,7 +427,6 @@ namespace LMS.Migrations
                 }
             };
 
-            // Add teachers
             foreach (var teacher in teachers)
             {
                 if (context.Users.Any(u => u.UserName == teacher.Email)) continue;
@@ -178,101 +441,7 @@ namespace LMS.Migrations
                 userManager.AddToRole(adminUser.Id, "Teacher");
             }
 
-            var courses = new[]
-            {
-                new CourseModel
-                {
-                    Name = ".NET-utbildning Hösten 2017",
-                    Description = "MVC.NET kurs",
-                    StartDate = new DateTime(2017, 08, 28),
-                    EndDate = new DateTime(2017, 12, 15)
-                }
-            };
-
-            foreach (var course in courses)
-            {
-                if (context.Courses.Any(c => c.Name == course.Name)) continue;
-
-                context.Courses.AddOrUpdate(course);
-            }
-
-            // Week 1
-
-            var modules = new[]
-            {
-                new ModuleModel
-                {
-                    Name = "Intro E-L 1.1, 1.2",
-                    Description = "Kurs introduktion och E-learning kapitel 1.1, 1.2",
-                    StartDate = new DateTime(2017, 8 , 28,  13, 00, 00),
-                    EndDate =  new DateTime(2017, 8 , 28, 17, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "E-L 1.3",
-                    Description = "E-Learning kapitel 1.3",
-                    StartDate = new DateTime(2017, 8 , 29,  8, 30, 00),
-                    EndDate =  new DateTime(2017, 8 , 29, 12, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "E-L 1.4, 1.5",
-                    Description = "E-Learning kapitel 1.4, 1.5",
-                    StartDate = new DateTime(2017, 8 , 29,  13, 00, 00),
-                    EndDate =  new DateTime(2017, 8 , 29, 17, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "C# Intro",
-                    Description = "Introduktion till C#",
-                    StartDate = new DateTime(2017, 8 , 30, 8, 30, 00),
-                    EndDate =  new DateTime(2017, 8 , 30, 12, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "C# Intro",
-                    Description = "Introduktion till C#",
-                    StartDate = new DateTime(2017, 8 , 30, 13, 00, 00),
-                    EndDate =  new DateTime(2017, 8 , 30, 17, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "Övning 2",
-                    StartDate = new DateTime(2017, 8 , 31, 8, 30, 00),
-                    EndDate =  new DateTime(2017, 8 , 31, 12, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "Övning 2",
-                    StartDate = new DateTime(2017, 8 , 31, 13, 00, 00),
-                    EndDate =  new DateTime(2017, 8 , 31, 17, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "C# Grund",
-                    StartDate = new DateTime(2017, 9 , 1, 8, 30, 00),
-                    EndDate =  new DateTime(2017, 9 , 1, 12, 00, 00)
-                },
-                new ModuleModel
-                {
-                    Name = "C# Grund",
-                    StartDate = new DateTime(2017, 9 , 1, 13, 00, 00),
-                    EndDate =  new DateTime(2017, 9 , 1, 17, 00, 00)
-                }
-
-
-                // Week 2
-
-                // TO DO
-            };
-
-            foreach (var module in modules)
-            {
-                if (context.Modules.Any(m => m.Name == module.Name)) continue;
-
-                context.Modules.AddOrUpdate(module);
-            }
-
+            context.SaveChanges();
         }
     }
 }

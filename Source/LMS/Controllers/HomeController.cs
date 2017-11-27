@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LMS.DataAccess;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -8,7 +9,8 @@ namespace LMS.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index()
+        private ApplicationDbContext db = new ApplicationDbContext();
+        public ActionResult Index()
 		{
 			return View();
 		}
