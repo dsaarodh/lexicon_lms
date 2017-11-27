@@ -1,4 +1,6 @@
-﻿@{
+﻿@*@model LMS.ViewModels.Widgets.TreeViewModel*@
+
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -30,29 +32,16 @@
     </div>
 </div>
 
-@Html.Partial("Widgets/_CollapsableList")
+@*<div id="tree"></div>
 
 @section Scripts
 {
 	<script>
-		function GetData()
-		{
-			return [
-					{ "text": "Folder1", "nodes": [] },
-					{ "text": "Folder2", "nodes": [
-						{ "text": "FolderB", "nodes": [
-							{ "text": "FolderOne", "nodes": []
-						}]
-					}]},
-					{ "text": "Logs", "nodes": [] }
-				];
-		}
-
 		$(function ()
 		{
-			$("#tree").treeview({ data: GetData() })
+			$("#tree").treeview(@Html.Raw(@Model.JsonObject))
 		})
 
 		
 	</script>
-}
+}*@
