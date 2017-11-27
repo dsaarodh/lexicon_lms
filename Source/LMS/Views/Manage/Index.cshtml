@@ -1,5 +1,6 @@
 ﻿@model LMS.ViewModels.Identity.IndexViewModel
 @using Microsoft.AspNet.Identity
+@using LMS.Controllers
 @{
     ViewBag.Title = "Manage";
 }
@@ -62,10 +63,10 @@
         <dd>
             @if (Request.IsAuthenticated)
             {
-                if (User.IsInRole("Student"))
-                { <p>Student</p>}
-                if (User.IsInRole("Teacher"))
-                { <p>Teacher</p>}
+                if (User.IsInRole(Role.Student))
+                { <p>@Role.Student</p>}
+                if (User.IsInRole(Role.Teacher))
+                { <p>@Role.Teacher</p>}
             }
             else
             {
