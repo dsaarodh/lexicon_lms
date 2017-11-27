@@ -64,9 +64,9 @@
             @if (Request.IsAuthenticated)
             {
                 if (User.IsInRole(Role.Student))
-                { <p>@Role.Student</p>}
+                    { <p>@Role.Student</p>}
                 if (User.IsInRole(Role.Teacher))
-                { <p>@Role.Teacher</p>}
+                    { <p>@Role.Teacher</p>}
             }
             else
             {
