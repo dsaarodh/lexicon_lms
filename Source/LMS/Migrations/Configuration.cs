@@ -8,9 +8,9 @@ namespace LMS.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 	using LMS.DataAccess;
+    using LMS.Models;
 
-
-	internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
         public Configuration()
         {
@@ -175,6 +175,101 @@ namespace LMS.Migrations
 
                 var adminUser = userManager.FindByName(teacher.UserName);
                 userManager.AddToRole(adminUser.Id, "Teacher");
+            }
+
+            var courses = new[]
+            {
+                new CourseModel
+                {
+                    Name = ".NET-utbildning Hösten 2017",
+                    Description = "MVC.NET kurs",
+                    StartDate = new DateTime(2017, 08, 28),
+                    EndDate = new DateTime(2017, 12, 15)
+                }
+            };
+
+            foreach (var course in courses)
+            {
+                if (context.Courses.Any(c => c.Name == course.Name)) continue;
+
+                context.Courses.AddOrUpdate(course);
+            }
+
+            // Week 1
+
+            var modules = new[]
+            {
+                new ModuleModel
+                {
+                    Name = "Intro E-L 1.1, 1.2",
+                    Description = "Kurs introduktion och E-learning kapitel 1.1, 1.2",
+                    StartDate = new DateTime(2017, 8 , 28,  13, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 28, 17, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "E-L 1.3",
+                    Description = "E-Learning kapitel 1.3",
+                    StartDate = new DateTime(2017, 8 , 29,  8, 30, 00),
+                    EndDate =  new DateTime(2017, 8 , 29, 12, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "E-L 1.4, 1.5",
+                    Description = "E-Learning kapitel 1.4, 1.5",
+                    StartDate = new DateTime(2017, 8 , 29,  13, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 29, 17, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "C# Intro",
+                    Description = "Introduktion till C#",
+                    StartDate = new DateTime(2017, 8 , 30, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 8 , 30, 12, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "C# Intro",
+                    Description = "Introduktion till C#",
+                    StartDate = new DateTime(2017, 8 , 30, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 30, 17, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "Övning 2",
+                    StartDate = new DateTime(2017, 8 , 31, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 8 , 31, 12, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "Övning 2",
+                    StartDate = new DateTime(2017, 8 , 31, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 8 , 31, 17, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "C# Grund",
+                    StartDate = new DateTime(2017, 9 , 1, 8, 30, 00),
+                    EndDate =  new DateTime(2017, 9 , 1, 12, 00, 00)
+                },
+                new ModuleModel
+                {
+                    Name = "C# Grund",
+                    StartDate = new DateTime(2017, 9 , 1, 13, 00, 00),
+                    EndDate =  new DateTime(2017, 9 , 1, 17, 00, 00)
+                }
+
+
+                // Week 2
+
+                // TO DO
+            };
+
+            foreach (var module in modules)
+            {
+                if (context.Modules.Any(m => m.Name == module.Name)) continue;
+
+                context.Modules.AddOrUpdate(module);
             }
 
         }

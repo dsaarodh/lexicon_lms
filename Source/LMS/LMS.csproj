@@ -203,8 +203,13 @@
     <Compile Include="Migrations\201711241308545_Initial.Designer.cs">
       <DependentUpon>201711241308545_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711271031386_Courses_and_Modules.cs" />
+    <Compile Include="Migrations\201711271031386_Courses_and_Modules.Designer.cs">
+      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CourseModel.cs" />
+    <Compile Include="Models\ModuleModel.cs" />
     <Compile Include="ViewModels\Identity\AccountViewModels.cs" />
     <Compile Include="DataAccess\ApplicationDbContext.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
@@ -293,6 +298,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711241308545_Initial.resx">
       <DependentUpon>201711241308545_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201711271031386_Courses_and_Modules.resx">
+      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
