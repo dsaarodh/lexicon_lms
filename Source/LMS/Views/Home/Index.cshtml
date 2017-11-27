@@ -1,5 +1,5 @@
-﻿@{
-﻿@*@model LMS.ViewModels.Widgets.TreeViewModel*@
+﻿﻿@*@model LMS.ViewModels.Widgets.TreeViewModel*@
+
 ﻿@using LMS.Controllers
 @if (Request.IsAuthenticated)
 {
@@ -7,7 +7,7 @@
         { <p>@Role.Student</p>}
     else if (User.IsInRole(Role.Teacher))
         { <p>@Role.Teacher</p>}
-
+}
 @{
 }
 
