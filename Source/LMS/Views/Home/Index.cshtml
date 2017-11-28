@@ -59,23 +59,23 @@
 
     </div>
     <div id="modules" class="tab-pane fade">
-        <p>Some content in menu 1.</p>
-    </div>
+		<div class="col-md-6">
+			<div id="modulesList"/>
+		</div>
+	</div>
     <div id="info" class="tab-pane fade">
         <p>Some content in menu 2.</p>
     </div>
 </div>
-
-@*<div id="tree"></div>
 
 @section Scripts
 {
 	<script>
 		$(function ()
 		{
-			$("#tree").treeview(@Html.Raw(@Model.JsonObject))
+			@*$("#modulesList").treeview(@Html.Raw(@Model.JsonObject))*@
 		})
 
 		
 	</script>
-}*@
+}
