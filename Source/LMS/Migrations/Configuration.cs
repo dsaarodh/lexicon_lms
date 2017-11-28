@@ -22,8 +22,8 @@ namespace LMS.Migrations
 		protected override void Seed(ApplicationDbContext context)
 		{
 #if DEBUG
-			if (!System.Diagnostics.Debugger.IsAttached)
-				System.Diagnostics.Debugger.Launch();
+//			if (!System.Diagnostics.Debugger.IsAttached)
+//				System.Diagnostics.Debugger.Launch();
 #endif // DEBUG
 
 			var lmsSeedData = CreateLMSSeedData();
