@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using LMS.DataAccess;
+using Microsoft.Owin;
 using Owin;
 
 [assembly: OwinStartupAttribute(typeof(LMS.Startup))]
@@ -8,6 +9,8 @@ namespace LMS
     {
         public void Configuration(IAppBuilder app)
         {
+			new ApplicationDbContext().Database.CreateIfNotExists();
+
             ConfigureAuth(app);
         }
     }
