@@ -1,4 +1,4 @@
-﻿﻿@*@model LMS.ViewModels.Widgets.TreeViewModel*@
+﻿@model LMS.ViewModels.Widgets.TreeViewModel
 
 ﻿@using LMS.Controllers
 @if (Request.IsAuthenticated)
@@ -73,7 +73,7 @@
 	<script>
 		$(function ()
 		{
-			@*$("#modulesList").treeview(@Html.Raw(@Model.JsonObject))*@
+			$("#modulesList").treeview(@Html.Raw(@Model.JsonObject))
 		})
 
 		

@@ -1,52 +1,39 @@
 ﻿using LMS.ViewModels.Widgets;
-﻿using LMS.DataAccess;
-using System;
-using System.Collections.Generic;
+using LMS.DataAccess;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
+using static LMS.ViewModels.Widgets.TreeViewModel;
+using System.Collections.Generic;
 
 namespace LMS.Controllers
 {
 	public class HomeController : Controller
 	{
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index()
-		{
-			/*
-			var m = new TreeViewModel()
-			{
-					EnableLinks = true,
-					Data = new[]
-						{
-							new TreeViewModel.TreeViewNode()
-							{
-								Text = "First",
-								Nodes =
-									{
-										new TreeViewModel.TreeViewNode() { Text = "First" },
-										new TreeViewModel.TreeViewNode()
-											{
-												Text = "Second",
-												Href = Url.Action("About")
-											}
-									}
-							},
-							new TreeViewModel.TreeViewNode()
-							{
-								Text = "Second",
-								Nodes =
-									{
-										new TreeViewModel.TreeViewNode() { Text = "First" },
-										new TreeViewModel.TreeViewNode() { Text = "Second"}
-									}
-							}
-						}
-				};
-			return View(m);
-			*/
 
-			return View();
+		public ActionResult Index()
+		{
+			var courses = db.Courses.Include(c => c.Modules.Select(m => m.Activities)).ToList();
+			var treeData = courses.Select(c =>
+				{
+					var cNode = new TreeViewNode { Text = c.Name };
+					cNode.Nodes = c.Modules.Select(m =>
+						{
+							var node = new TreeViewNode { Text = m.Name };
+							node.Nodes = m.Activities.Select(a => new TreeViewNode { Text = a.Name }).ToArray();
+							return node;
+						}).ToArray();
+					return cNode;
+				}).ToArray();
+
+			var model = new TreeViewModel()
+			{
+				EnableLinks = true,
+				Data = treeData
+			};
+
+			return View(model);
 		}
 
 		public ActionResult About()
