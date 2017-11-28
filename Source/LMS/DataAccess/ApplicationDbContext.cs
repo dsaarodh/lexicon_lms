@@ -1,4 +1,5 @@
 ﻿using LMS.Models;
+using LMS.Models.AppData;
 using LMS.Models.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
