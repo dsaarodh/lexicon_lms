@@ -3,6 +3,8 @@ using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 using System.Drawing;
 
+// TODO: If someone enter Json-executable code in a field that is Json serialized, will this present a security risk?
+
 namespace LMS.ViewModels.Widgets
 {
 	/// <summary>
