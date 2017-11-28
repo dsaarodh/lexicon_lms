@@ -527,7 +527,10 @@
 
 			// Add expand, collapse or empty spacer icons
 			var classList = [];
-			if (node.nodes) {
+// dsaar-begin
+			if (node.nodes && node.nodes.length > 0)
+// dsaar-end
+			{
 				classList.push('expand-icon');
 				if (node.state.expanded) {
 					classList.push(_this.options.collapseIcon);
