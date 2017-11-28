@@ -197,21 +197,23 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711241242393_InitialCreate.cs" />
-    <Compile Include="Migrations\201711241242393_InitialCreate.Designer.cs">
-      <DependentUpon>201711241242393_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201711271401435_Init.cs" />
+    <Compile Include="Migrations\201711271401435_Init.Designer.cs">
+      <DependentUpon>201711271401435_Init.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711241308545_Initial.cs" />
-    <Compile Include="Migrations\201711241308545_Initial.Designer.cs">
-      <DependentUpon>201711241308545_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201711271452278_Init2.cs" />
+    <Compile Include="Migrations\201711271452278_Init2.Designer.cs">
+      <DependentUpon>201711271452278_Init2.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201711271031386_Courses_and_Modules.cs" />
-    <Compile Include="Migrations\201711271031386_Courses_and_Modules.Designer.cs">
-      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
+    <Compile Include="Migrations\201711271510089_Init21.cs" />
+    <Compile Include="Migrations\201711271510089_Init21.Designer.cs">
+      <DependentUpon>201711271510089_Init21.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\CourseModel.cs" />
-    <Compile Include="Models\ModuleModel.cs" />
+    <Compile Include="Models\Activity.cs" />
+    <Compile Include="Models\ActivityType.cs" />
+    <Compile Include="Models\Course.cs" />
+    <Compile Include="Models\Module.cs" />
     <Compile Include="ViewModels\Identity\AccountViewModels.cs" />
     <Compile Include="DataAccess\ApplicationDbContext.cs" />
     <Compile Include="Models\Identity\ApplicationUser.cs" />
@@ -302,14 +304,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201711241242393_InitialCreate.resx">
-      <DependentUpon>201711241242393_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711271401435_Init.resx">
+      <DependentUpon>201711271401435_Init.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711241308545_Initial.resx">
-      <DependentUpon>201711241308545_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711271452278_Init2.resx">
+      <DependentUpon>201711271452278_Init2.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201711271031386_Courses_and_Modules.resx">
-      <DependentUpon>201711271031386_Courses_and_Modules.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201711271510089_Init21.resx">
+      <DependentUpon>201711271510089_Init21.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
