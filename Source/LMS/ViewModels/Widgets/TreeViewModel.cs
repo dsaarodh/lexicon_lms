@@ -25,6 +25,11 @@ namespace LMS.ViewModels.Widgets
 		public Color BorderColor { get; set; }
 		public Color Color { get; set; }
 
+		public string ExpandIcon { get; set; } = "glyphicon glyphicon-plus";
+		public string CollapseIcon { get; set; } = "glyphicon glyphicon-minus";
+		public string EmptyIcon { get; set; } = "glyphicon";
+		public string CheckedIcon { get; set; } = "glyphicon glyphicon-check";
+
 		public int Levels { get; set; }
 
 		public ICollection<TreeViewNode> Data { get; set; }
