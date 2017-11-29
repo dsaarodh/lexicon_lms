@@ -1,23 +1,15 @@
-﻿@model LMS.ViewModels.ScheduleViewModels
-@using LMS.Controllers
-@using System.Globalization;
+﻿@using LMS.Controllers
 @if (Request.IsAuthenticated)
 {
     if (User.IsInRole(Role.Student))
-        {
-            <p>@Role.Student</p>
-            <p>@Model.Course.Name</p>
-        }
+        { <p>@Role.Student</p>}
     else if (User.IsInRole(Role.Teacher))
-    {
-        <p>@Role.Teacher</p>
-        <p>@Model.Course.Name</p>
-    }
+        { <p>@Role.Teacher</p>}
 }
 
 
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#schema">Veckoschema (@Model.Calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))</a></li>
+    <li class="active"><a data-toggle="tab" href="#schema">Veckoschema</a></li>
     <li><a data-toggle="tab" href="#modules">Moduler</a></li>
     <li><a data-toggle="tab" href="#info">Kursinfo</a></li>
 </ul>
@@ -25,40 +17,39 @@
 <div class="tab-content row">
     <div id="schema" class="tab-pane fade in active">
         <div class="col-md-6">
-            @Html.Partial( "_SchedulePartial", Model)
-            @*<table class="schemaTbl">
+            <table class="schemaTbl">
                 <tr>
                     <th>
-                        Dag
+                        Dag (v 42)
                     </th>
                     <th>
                         Ämne
                     </th>
                 </tr>
                 <tr>
-                    <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(0).DayOfWeek) @Model.FirstDayOfWeek.ToShortDateString()</td>
+                    <td>@DateTime.Now.DayOfWeek @DateTime.Now.ToShortDateString()</td>
                     <td>C# Grund</td>
                 </tr>
                 <tr>
-                    <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(1).DayOfWeek) @Model.FirstDayOfWeek.AddDays(1).ToShortDateString()</td>
+                    <td>@DateTime.Now.AddDays(1).DayOfWeek @DateTime.Now.AddDays(1).ToShortDateString()</td>
                     <td>HTML5</td>
                 </tr>
                 <tr>
-                    <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(2).DayOfWeek) @Model.FirstDayOfWeek.AddDays(2).ToShortDateString()</td>
+                    <td>@DateTime.Now.AddDays(2).DayOfWeek @DateTime.Now.AddDays(2).ToShortDateString()</td>
                     <td>HTML5</td>
                 </tr>
                 <tr>
-                    <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(3).DayOfWeek) @Model.FirstDayOfWeek.AddDays(3).ToShortDateString()</td>
+                    <td>@DateTime.Now.AddDays(3).DayOfWeek @DateTime.Now.AddDays(3).ToShortDateString()</td>
                     <td>CSS Grund</td>
                 </tr>
                 <tr>
-                    <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(4).DayOfWeek) @Model.FirstDayOfWeek.AddDays(4).ToShortDateString()</td>
+                    <td>@DateTime.Now.AddDays(4).DayOfWeek @DateTime.Now.AddDays(4).ToShortDateString()</td>
                     <td>CSS Övning</td>
                 </tr>
-            </table>*@
+            </table>
         </div>
 
-        <div id="right" class="col-md-6">
+        <div class="col-md-6">
             Massa content
         </div>
 
