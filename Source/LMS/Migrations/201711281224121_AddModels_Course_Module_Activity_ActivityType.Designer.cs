@@ -7,13 +7,13 @@ namespace LMS.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Courses_and_Modules : IMigrationMetadata
+    public sealed partial class AddModels_Course_Module_Activity_ActivityType : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Courses_and_Modules));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddModels_Course_Module_Activity_ActivityType));
         
         string IMigrationMetadata.Id
         {
-            get { return "201711271031386_Courses_and_Modules"; }
+            get { return "201711281224121_AddModels_Course_Module_Activity_ActivityType"; }
         }
         
         string IMigrationMetadata.Source

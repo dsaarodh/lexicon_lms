@@ -1,3 +1,5 @@
+﻿@model LMS.ViewModels.Widgets.TreeViewModel
+
 ﻿@using LMS.Controllers
 @if (Request.IsAuthenticated)
 {
@@ -5,6 +7,8 @@
         { <p>@Role.Student</p>}
     else if (User.IsInRole(Role.Teacher))
         { <p>@Role.Teacher</p>}
+}
+@{
 }
 
 
@@ -55,9 +59,21 @@
 
     </div>
     <div id="modules" class="tab-pane fade">
-        <p>Some content in menu 1.</p>
-    </div>
+		<div class="col-md-6">
+			<div id="modulesList"/>
+		</div>
+	</div>
     <div id="info" class="tab-pane fade">
         <p>Some content in menu 2.</p>
     </div>
 </div>
+
+@section Scripts
+{
+	<script>
+		$(function ()
+        {
+            $("#modulesList").treeview(@Html.Raw(@Model.JsonObject))
+		})
+	</script>
+}
