@@ -134,7 +134,7 @@ namespace LMS.Migrations
 					StartDate = new DateTime(2017, 10 , 1, 8, 30, 00),
 					EndDate =  new DateTime(2017, 10 , 1, 12, 00, 00),
 				//	Module = modules[1],
-					ActivityType = activityTypes[2]
+					ActivityType = activityTypes[1]
 				},
 				new Activity
 				{
@@ -200,7 +200,7 @@ namespace LMS.Migrations
 					Description = "Bygg ett garage för fordon",
 					StartDate = new DateTime(2017, 9 , 15, 00, 00, 00),
 					EndDate =  new DateTime(2017, 9 , 29, 00, 00, 00),
-					Activities = new[] { activities[5], activities[6], activities[7] }
+					Activities = new[] { activities[5], activities[6] }
 				//	Course = courses[0]
 				},
 				new Module
@@ -209,7 +209,7 @@ namespace LMS.Migrations
 					Description = "Klasser och arv",
 					StartDate = new DateTime(2017, 10 , 1, 00, 00, 00),
 					EndDate =  new DateTime(2017, 10 , 14, 00, 00, 00),
-					Activities = new[] { activities[8] }
+					Activities = new[] { activities[7], activities[8] }
 				//	Course = courses[0]
 				},
 				new Module
