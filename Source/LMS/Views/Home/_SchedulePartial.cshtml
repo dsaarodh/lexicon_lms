@@ -1,0 +1,34 @@
+﻿@model LMS.ViewModels.ScheduleViewModels
+@using System.Globalization;
+
+<table class="schemaTbl">
+    <tr>
+        <th>
+            Dag
+        </th>
+        <th>
+            Ämne
+        </th>
+    </tr>
+    <tr>
+        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(0).DayOfWeek) @Model.FirstDayOfWeek.ToShortDateString()</td>
+        <td>C# Grund</td>
+    </tr>
+    <tr>
+        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(1).DayOfWeek) @Model.FirstDayOfWeek.AddDays(1).ToShortDateString()</td>
+        <td>HTML5</td>
+    </tr>
+    <tr>
+        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(2).DayOfWeek) @Model.FirstDayOfWeek.AddDays(2).ToShortDateString()</td>
+        <td>HTML5</td>
+    </tr>
+    <tr>
+        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(3).DayOfWeek) @Model.FirstDayOfWeek.AddDays(3).ToShortDateString()</td>
+        <td>@Ajax.ActionLink("CSS Grund", "Module", new AjaxOptions { UpdateTargetId = "right" })</td>
+    </tr>
+    <tr>
+        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(4).DayOfWeek) @Model.FirstDayOfWeek.AddDays(4).ToShortDateString()</td>
+        <td>@Ajax.ActionLink("CSS Övning", "Module", "Home", new AjaxOptions() { UpdateTargetId = "right", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</td>
+    </tr>
+</table>
+
