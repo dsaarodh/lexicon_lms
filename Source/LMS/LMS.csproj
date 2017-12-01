@@ -297,8 +297,10 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Home\_Schedule.cshtml" />
+    <Content Include="Views\Home\_Course.cshtml" />
     <Content Include="Views\Home\_Module.cshtml" />
-    <Content Include="Views\Home\_SchedulePartial.cshtml" />
+    <Content Include="Views\Home\_Activity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
