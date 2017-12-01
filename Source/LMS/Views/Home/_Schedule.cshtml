@@ -20,7 +20,7 @@
     </tr>
     <tr>
         <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(2).DayOfWeek) @Model.FirstDayOfWeek.AddDays(2).ToShortDateString()</td>
-        <td>HTML5</td>
+        <td>@Ajax.ActionLink("HTML5", "Activity", new AjaxOptions { UpdateTargetId = "right" })</td>
     </tr>
     <tr>
         <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(3).DayOfWeek) @Model.FirstDayOfWeek.AddDays(3).ToShortDateString()</td>
@@ -28,7 +28,7 @@
     </tr>
     <tr>
         <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(4).DayOfWeek) @Model.FirstDayOfWeek.AddDays(4).ToShortDateString()</td>
-        <td>@Ajax.ActionLink("CSS Övning", "Module", "Home", new AjaxOptions() { UpdateTargetId = "right", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</td>
+        <td>@Ajax.ActionLink("CSS Övning", "Course", "Home", new AjaxOptions() { UpdateTargetId = "right", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</td>
     </tr>
 </table>
 

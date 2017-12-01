@@ -61,7 +61,7 @@ namespace LMS.Controllers
 
             var treeData = courses.Select(c =>
             {
-                var cNode = new TreeViewNode { Text = c.Name };
+                var cNode = new TreeViewNode { Text = c.Name, Href = "/Home/Course"  };
                 cNode.Nodes = c.Modules.Select(m =>
                 {
                     var node = new TreeViewNode { Text = m.Name };
@@ -93,9 +93,24 @@ namespace LMS.Controllers
 			return View();
 		}
 
+        public PartialViewResult Activity()
+        {            
+            Activity activity = db.Activities.Where(a => a.Id == 1).FirstOrDefault();
+
+            return PartialView("_Activity", activity);
+        }
+
+        public PartialViewResult Course()
+        {
+            Course course = db.Courses.Where(c => c.Id == 1).FirstOrDefault();
+            return PartialView("_Course", course);
+        }
+
         public PartialViewResult Module()
         {
-            return PartialView("_Module");
+            Module module = db.Modules.Where(m => m.Id == 1).FirstOrDefault();
+            module.ColorCode = "#070707";
+            return PartialView("_Module", module);
         }
     }
 }
