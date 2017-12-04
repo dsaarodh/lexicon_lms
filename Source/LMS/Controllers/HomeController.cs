@@ -95,20 +95,55 @@ namespace LMS.Controllers
 			return View();
 		}
 
-
+		[Authorize]
 		public ActionResult CourseInfo(int id)
 		{
-			return PartialView("_Course", db.Courses.Find(id));
+			var userId = User.Identity.GetUserId();
+
+			var course = db.Courses.Find(id);
+			if (course != null)
+			{
+				if (User.IsInRole(Role.Teacher) || course.Users.Any(u => u.Id.Equals(userId)))
+					return PartialView("_Course", course);
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
 		}
 
+		[Authorize]
 		public ActionResult ModuleInfo(int id)
 		{
-			return PartialView("_Module", db.Modules.Find(id));
+			var userId = User.Identity.GetUserId();
+
+			var module = db.Modules.Find(id);
+			if (module != null)
+			{
+				if (User.IsInRole(Role.Teacher) || module.Course.Users.Any(u => u.Id.Equals(userId)))
+					return PartialView("_Module", module);
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
 		}
 
+		[Authorize]
 		public ActionResult ActivityInfo(int id)
 		{
-			return PartialView("_Activity", db.Activities.Find(id));
+			var userId = User.Identity.GetUserId();
+
+			var activity = db.Activities.Find(id);
+			if (activity != null)
+			{
+				if (User.IsInRole(Role.Teacher) || activity.Module.Course.Users.Any(u => u.Id.Equals(userId)))
+					return PartialView("_Activity", activity);
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
 		}
 	}
 }
