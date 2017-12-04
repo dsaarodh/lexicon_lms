@@ -62,6 +62,9 @@
 		<div class="col-md-6">
 			<div id="modulesList"/>
 		</div>
+		<div class="col-md-6">
+			<div id="someinfo" />
+		</div>
 	</div>
     <div id="info" class="tab-pane fade">
         <p>Some content in menu 2.</p>
@@ -73,7 +76,12 @@
 	<script>
 		$(function ()
         {
-            $("#modulesList").treeview(@Html.Raw(@Model.JsonObject))
+			$("#modulesList").treeview(
+				{
+					enableLinks: true,
+					data: @Html.Raw(Model.JsonData),
+					onNodeSelected: function (event, data) { $("#someinfo").load(data.customData); }
+				})
 		})
 	</script>
 }

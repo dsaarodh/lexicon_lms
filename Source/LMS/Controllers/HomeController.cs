@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using LMS.Models.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
+using System;
 
 namespace LMS.Controllers
 {
@@ -30,19 +32,18 @@ namespace LMS.Controllers
 
             var treeData = courses.Select(c =>
             {
-                var cNode = new TreeViewNode { Text = c.Name };
+                var cNode = new TreeViewNode { Text = c.Name, Selectable = true, CustomData = Url.Action(nameof(CourseInfo), new { Id = c.Id }) };
                 cNode.Nodes = c.Modules.Select(m =>
                 {
-                    var node = new TreeViewNode { Text = m.Name };
-                    node.Nodes = m.Activities.Select(a => new TreeViewNode { Text = a.Name }).ToArray();
+                    var node = new TreeViewNode { Text = m.Name, Selectable = true, CustomData = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) };
+					node.Nodes = m.Activities.Select(a => new TreeViewNode { Text = a.Name, Selectable = true, CustomData = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }).ToArray();
                     return node;
                 }).ToArray();
                 return cNode;
             }).ToArray();
 
-            var model = new TreeViewModel()
+			var model = new TreeViewModel()
 			{
-				EnableLinks = true,
 				Data = treeData
 			};
 
@@ -62,5 +63,22 @@ namespace LMS.Controllers
 
 			return View();
 		}
+
+
+		public JsonResult CourseInfo(int id)
+		{
+			return new JsonResult() { Data = "Courses/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+		}
+
+		public JsonResult ModuleInfo(int id)
+		{
+			return new JsonResult() { Data = "Modules/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+		}
+
+		public JsonResult ActivityInfo(int id)
+		{
+			return new JsonResult() { Data = "Activities/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+		}
+
 	}
 }

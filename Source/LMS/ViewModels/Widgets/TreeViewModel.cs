@@ -14,7 +14,7 @@ namespace LMS.ViewModels.Widgets
 	public class TreeViewModel
 	{
 		[JsonIgnore]
-		public string JsonObject => JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+		public string JsonData => JsonConvert.SerializeObject(Data, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
 
 		public bool EnableLinks { get; set; }
 		public bool ShowTags { get; set; }
@@ -54,6 +54,8 @@ namespace LMS.ViewModels.Widgets
 				public bool Expanded { get; set; }
 				public bool Selected { get; set; }
 			}
+
+			public object CustomData { get; set; }
 		}
 
 		/*
