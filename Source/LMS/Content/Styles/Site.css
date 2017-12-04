@@ -53,8 +53,11 @@ textarea {
 }
 
 .tab-content {
-    border: 1px solid #dddddd;
-    /*border-top: none;*/
+    margin: 0;
+    border-top: 0;
+    border-right: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    border-left: 1px solid #dddddd;
 }
 
 .nav-tabs > li > a {

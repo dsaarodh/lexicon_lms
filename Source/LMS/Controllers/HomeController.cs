@@ -1,27 +1,58 @@
-﻿using LMS.ViewModels.Widgets;
-using LMS.DataAccess;
+﻿using LMS.DataAccess;
+using LMS.Models.AppData;
+using LMS.ViewModels;
+using LMS.ViewModels.Widgets;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity;
 using static LMS.ViewModels.Widgets.TreeViewModel;
-using System.Collections.Generic;
-using LMS.Models.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using System;
 
 namespace LMS.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
 	{
         private ApplicationDbContext db = new ApplicationDbContext();
 
-		public ActionResult Index()
-		{
-            if (!User.Identity.IsAuthenticated)
-                return View(new TreeViewModel());
+        [Authorize(Roles = "Teacher, Student")]
+        public ActionResult Index()
+        {
+            var scheduleVM = new ScheduleViewModels();
+            CultureInfo cultureInfo = new CultureInfo("sv-SE");
+            scheduleVM.Calendar = cultureInfo.Calendar;
 
+
+            var userId = User.Identity.GetUserId();
+            var courseId = db.Users.Find(userId).CourseId;
+
+            scheduleVM.Course = new Course();
+            if (!User.IsInRole(Role.Teacher))
+            {
+                scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
+            }
+
+                
+            //scheduleVM.Course = new Course() { Name = "Test Course" };
+            
+
+
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                scheduleVM.TreeView = new TreeViewModel();
+                return View(scheduleVM);
+            }
+
+            scheduleVM.TreeView = TreeView();
+
+            return View(scheduleVM);
+        }
+
+        private TreeViewModel TreeView()
+        {
             var userId = User.Identity.GetUserId();
             var courseId = db.Users.Find(userId).CourseId;
             bool isTeacher = User.IsInRole(Role.Teacher);
@@ -47,10 +78,7 @@ namespace LMS.Controllers
 				Data = treeData
 			};
 
-			return View(model);
-		}
-
-		public ActionResult About()
+        public ActionResult About()
 		{
 			ViewBag.Message = "Your application description page.";
 
@@ -80,5 +108,24 @@ namespace LMS.Controllers
 			return new JsonResult() { Data = "Activities/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 		}
 
-	}
+        public PartialViewResult Activity()
+        {            
+            Activity activity = db.Activities.Where(a => a.Id == 1).FirstOrDefault();
+
+            return PartialView("_Activity", activity);
+        }
+
+        public PartialViewResult Course()
+        {
+            Course course = db.Courses.Where(c => c.Id == 1).FirstOrDefault();
+            return PartialView("_Course", course);
+        }
+
+        public PartialViewResult Module()
+        {
+            Module module = db.Modules.Where(m => m.Id == 1).FirstOrDefault();
+            module.ColorCode = "#070707";
+            return PartialView("_Module", module);
+        }
+    }
 }
