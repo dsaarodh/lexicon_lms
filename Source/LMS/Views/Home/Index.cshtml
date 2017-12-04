@@ -29,23 +29,19 @@
         <div class="col-md-6">
             @Html.Partial("_Schedule", Model)
         </div>
-
-        <div id="right" class="col-md-6">
-            Massa content
-        </div>
-
     </div>
     <div id="modules" class="tab-pane fade">
 		<div class="col-md-6">
 			<div id="modulesList"/>
 		</div>
-		<div class="col-md-6">
-			<div id="someinfo" />
-		</div>
 	</div>
     <div id="info" class="tab-pane fade">
         <p>Some content in menu 2.</p>
     </div>
+
+	<div id="right" class="col-md-6">
+		Massa content
+	</div>
 </div>
 
 @section Scripts
@@ -56,8 +52,8 @@
 			$("#modulesList").treeview(
 				{
 					enableLinks: true,
-					data: @Html.Raw(Model.JsonData),
-					onNodeSelected: function (event, data) { $("#someinfo").load(data.customData); }
+					data: @Html.Raw(@Model.TreeView.JsonData),
+					onNodeSelected: function (event, data) { $("#right").load(data.customData); }
 				})
 		})
 	</script>

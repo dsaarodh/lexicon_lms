@@ -78,7 +78,10 @@ namespace LMS.Controllers
 				Data = treeData
 			};
 
-        public ActionResult About()
+			return model;
+		}
+
+		public ActionResult About()
 		{
 			ViewBag.Message = "Your application description page.";
 
@@ -93,39 +96,19 @@ namespace LMS.Controllers
 		}
 
 
-		public JsonResult CourseInfo(int id)
+		public ActionResult CourseInfo(int id)
 		{
-			return new JsonResult() { Data = "Courses/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+			return PartialView("_Course", db.Courses.Find(id));
 		}
 
-		public JsonResult ModuleInfo(int id)
+		public ActionResult ModuleInfo(int id)
 		{
-			return new JsonResult() { Data = "Modules/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+			return PartialView("_Module", db.Modules.Find(id));
 		}
 
-		public JsonResult ActivityInfo(int id)
+		public ActionResult ActivityInfo(int id)
 		{
-			return new JsonResult() { Data = "Activities/" + id, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+			return PartialView("_Activity", db.Activities.Find(id));
 		}
-
-        public PartialViewResult Activity()
-        {            
-            Activity activity = db.Activities.Where(a => a.Id == 1).FirstOrDefault();
-
-            return PartialView("_Activity", activity);
-        }
-
-        public PartialViewResult Course()
-        {
-            Course course = db.Courses.Where(c => c.Id == 1).FirstOrDefault();
-            return PartialView("_Course", course);
-        }
-
-        public PartialViewResult Module()
-        {
-            Module module = db.Modules.Where(m => m.Id == 1).FirstOrDefault();
-            module.ColorCode = "#070707";
-            return PartialView("_Module", module);
-        }
-    }
+	}
 }
