@@ -520,6 +520,15 @@
 				.attr('data-nodeid', node.nodeId)
 				.attr('style', _this.buildStyleOverride(node));
 
+// dsaar-begin : Added customizable classes per node
+			if (node.classList) {
+				node.classList.forEach(function (item) {
+					console.log("ITEM= " + item);
+					treeItem.addClass(item)
+				});
+			}
+// dsaar-end
+
 			// Add indent/spacer to mimic tree structure
 			for (var i = 0; i < (level - 1); i++) {
 				treeItem.append(_this.template.indent);
@@ -527,7 +536,8 @@
 
 			// Add expand, collapse or empty spacer icons
 			var classList = [];
-// dsaar-begin
+
+// dsaar-begin : Fix for initialized, but empty, list
 			if (node.nodes && node.nodes.length > 0)
 // dsaar-end
 			{

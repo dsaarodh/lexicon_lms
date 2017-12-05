@@ -38,11 +38,12 @@ namespace LMS.ViewModels.Widgets
 		{
 			public string Text { get; set; }
 			public string Icon { get; set; }
+			public string[] ClassList { get; set; }
 			public string SelectedIcon { get; set; }
 			public Color Color { get; set; }
 			public Color BackColor { get; set; }
 			public string Href { get; set; }
-			public bool Selectable { get; set; }
+			public bool Selectable { get; set; } = true;
 			public TreeViewNodeState State { get; set; }
 			public string[] Tags { get; set; }
 			public ICollection<TreeViewNode> Nodes { get; set; } = new List<TreeViewNode>();
