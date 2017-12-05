@@ -62,23 +62,42 @@ namespace LMS.Controllers
                 .Include(c => c.Modules.Select(m => m.Activities)).ToList();
 
             var treeData = courses.Select(c =>
-            {
-                var cNode = new TreeViewNode { Text = c.Name, Selectable = true, CustomData = Url.Action(nameof(CourseInfo), new { Id = c.Id }) };
-                cNode.Nodes = c.Modules.Select(m =>
-                {
-                    var node = new TreeViewNode { Text = m.Name, Selectable = true, CustomData = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) };
-					node.Nodes = m.Activities.Select(a => new TreeViewNode { Text = a.Name, Selectable = true, CustomData = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }).ToArray();
-                    return node;
-                }).ToArray();
-                return cNode;
-            }).ToArray();
+				{
+					var cNode = new TreeViewNode
+						{
+							Text = c.Name,
+							CustomData = Url.Action(nameof(CourseInfo), new { Id = c.Id })
+						};
 
-			var model = new TreeViewModel()
-			{
-				Data = treeData
-			};
+					cNode.Nodes = c.Modules.Select(m =>
+						{
+							var mNode = new TreeViewNode
+								{
+									Text = m.Name,
+									CustomData = Url.Action(nameof(ModuleInfo), new { Id = m.Id })
+								};
 
-			return model;
+							mNode.Nodes = m.Activities.Select(a =>
+								{
+									var aNode = new TreeViewNode
+										{
+											Text = a.Name,
+											CustomData = Url.Action(nameof(ActivityInfo), new { Id = a.Id })
+										};
+
+									return aNode;
+								}).ToList();
+							mNode.Nodes.Add(new TreeViewNode { Text = "ADD ACTIVITY", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateActivity)) });
+
+							return mNode;
+						}).ToList();
+					cNode.Nodes.Add(new TreeViewNode { Text = "ADD MODULE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateModule)) });
+
+					return cNode;
+				}).ToList();
+			treeData.Add(new TreeViewNode { Text = "ADD COURSE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateCourse)) });
+
+			return new TreeViewModel() { Data = treeData };
 		}
 
 		public ActionResult About()
@@ -93,6 +112,43 @@ namespace LMS.Controllers
 			ViewBag.Message = "Your contact page.";
 
 			return View();
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+		public PartialViewResult CreateCourse()
+		{
+			return PartialView();
+		}
+
+		[HttpPost]
+//		[ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult CreateCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		{
+			if (ModelState.IsValid)
+			{
+				db.Courses.Add(course);
+				db.SaveChanges();
+				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+			}
+
+		//	return new JsonResult() { Data = new { Success = false, Data = PartialView(nameof(CreateCourse)) } };
+			return PartialView(course);
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+		public PartialViewResult CreateModule()
+		{
+			return PartialView();
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+		public PartialViewResult CreateActivity()
+		{
+			return PartialView();
 		}
 
 		[Authorize]

@@ -301,6 +301,7 @@
     <Content Include="Views\Home\_Course.cshtml" />
     <Content Include="Views\Home\_Module.cshtml" />
     <Content Include="Views\Home\_Activity.cshtml" />
+    <Content Include="Views\Home\CreateCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

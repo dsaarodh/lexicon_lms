@@ -69,3 +69,9 @@ textarea {
 .body-content {
     margin-top: 10px;
 }
+
+/**************************** TREE VIEW *************************************/
+
+.treeview .node-create {
+	color: red;
+}

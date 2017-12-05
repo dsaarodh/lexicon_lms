@@ -47,14 +47,65 @@
 @section Scripts
 {
 	<script>
-		$(function ()
-        {
-			$("#modulesList").treeview(
+
+		//var SubmitForm = function ()
+		//{ 
+		//	$("#login-form").submit(function() { 
+		//	$('.fail').hide();
+		//	$.ajax({  
+		//		url:"/login",
+		//		type: "post",  
+		//		data: $(this).serialize(),
+		//		error:function(){
+	 //               $('.fail').show();
+		//		},
+		//		success: function(data) {
+	 //               if (data == "y") {
+		//               //Login was successful. Redirect statement here?
+		//			} else {
+		//			//Failed login message here
+		//			}
+		//		}
+		//	});
+		//	return false; 
+		//});
+
+		var SubmitForm = function (action)
+		{
+
+			$.ajax(
+			{
+				type: "POST",
+				url: action,
+				data: $("form").serialize(),
+				success: function (result)
 				{
-					enableLinks: true,
-					data: @Html.Raw(@Model.TreeView.JsonData),
-					onNodeSelected: function (event, data) { $("#right").load(data.customData); }
-				})
+						if (result.Success)
+						{
+						//	$("#modulesList").html(result);
+							SetTreeView(result.Data);
+						}
+						else
+						{
+							$("#right").html(result);
+						}
+					}
+			});
+		}
+
+		var SetTreeView = function (data)
+			{
+				$("#modulesList").treeview(
+					{
+						enableLinks: true,
+						data: data,
+						onNodeSelected: function (event, data) { $("#right").load(data.customData); }
+					});
+			}
+
+		$(function ()
+		{
+			SetTreeView(@Html.Raw(@Model.TreeView.JsonData));			
 		})
 	</script>
 }
