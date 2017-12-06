@@ -51,55 +51,6 @@ namespace LMS.Controllers
             return View(scheduleVM);
         }
 
-        private TreeViewModel TreeView()
-        {
-            var userId = User.Identity.GetUserId();
-            var courseId = db.Users.Find(userId).CourseId;
-            bool isTeacher = User.IsInRole(Role.Teacher);
-
-            var courses = db.Courses
-                .Where(co => isTeacher ? true : co.Id == courseId)
-                .Include(c => c.Modules.Select(m => m.Activities)).ToList();
-
-            var treeData = courses.Select(c =>
-				{
-					var cNode = new TreeViewNode
-						{
-							Text = c.Name,
-							CustomData = Url.Action(nameof(CourseInfo), new { Id = c.Id })
-						};
-
-					cNode.Nodes = c.Modules.Select(m =>
-						{
-							var mNode = new TreeViewNode
-								{
-									Text = m.Name,
-									CustomData = Url.Action(nameof(ModuleInfo), new { Id = m.Id })
-								};
-
-							mNode.Nodes = m.Activities.Select(a =>
-								{
-									var aNode = new TreeViewNode
-										{
-											Text = a.Name,
-											CustomData = Url.Action(nameof(ActivityInfo), new { Id = a.Id })
-										};
-
-									return aNode;
-								}).ToList();
-							mNode.Nodes.Add(new TreeViewNode { Text = "ADD ACTIVITY", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateActivity)) });
-
-							return mNode;
-						}).ToList();
-					cNode.Nodes.Add(new TreeViewNode { Text = "ADD MODULE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateModule)) });
-
-					return cNode;
-				}).ToList();
-			treeData.Add(new TreeViewNode { Text = "ADD COURSE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateCourse)) });
-
-			return new TreeViewModel() { Data = treeData };
-		}
-
 		public ActionResult About()
 		{
 			ViewBag.Message = "Your application description page.";
@@ -113,6 +64,8 @@ namespace LMS.Controllers
 
 			return View();
 		}
+
+#region Create
 
 		[HttpGet]
 		[Authorize(Roles = Role.Teacher)]
@@ -139,17 +92,59 @@ namespace LMS.Controllers
 
 		[HttpGet]
 		[Authorize(Roles = Role.Teacher)]
-		public PartialViewResult CreateModule()
+		public PartialViewResult CreateModule(int courseId)
 		{
+			ViewBag.CourseId = courseId;
 			return PartialView();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult CreateModule(int courseId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode")] Module module)
+		{
+			var course = db.Courses.Find(courseId);
+			if (ModelState.IsValid && course != null)
+			{
+				course.Modules.Add(module);
+				db.SaveChanges();
+
+				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+			}
+
+			return PartialView(module);
 		}
 
 		[HttpGet]
 		[Authorize(Roles = Role.Teacher)]
-		public PartialViewResult CreateActivity()
+		public PartialViewResult CreateActivity(int moduleId)
 		{
+			ViewBag.ModuleId = moduleId;
+//			ViewBag.ModuleList = new SelectList(db.Courses, nameof(Module.CourseId), "Name", moduleId);
 			return PartialView();
 		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult CreateActivity(int moduleId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityType")] Activity activity)
+		{
+			var module = db.Modules.Find(moduleId);
+			if (ModelState.IsValid && module != null)
+			{
+				module.Activities.Add(activity);
+				db.SaveChanges();
+
+				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+			}
+
+//			ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "Name", moduleId);
+			return PartialView(activity);
+		}
+
+#endregion // Create
+
+#region InfoBox
 
 		[Authorize]
 		public ActionResult CourseInfo(int id)
@@ -201,5 +196,57 @@ namespace LMS.Controllers
 			else
 				return new HttpNotFoundResult();
 		}
+
+#endregion // InfoBox
+
+		private TreeViewModel TreeView()
+		{
+			var userId = User.Identity.GetUserId();
+			var courseId = db.Users.Find(userId).CourseId;
+			bool isTeacher = User.IsInRole(Role.Teacher);
+
+			var courses = db.Courses
+				.Where(co => isTeacher ? true : co.Id == courseId)
+				.Include(c => c.Modules.Select(m => m.Activities)).ToList();
+
+			var treeData = courses.Select(c =>
+			{
+				var cNode = new TreeViewNode
+				{
+					Text = c.Name,
+					CustomData = Url.Action(nameof(CourseInfo), new { Id = c.Id })
+				};
+
+				cNode.Nodes = c.Modules.Select(m =>
+				{
+					var mNode = new TreeViewNode
+					{
+						Text = m.Name,
+						CustomData = Url.Action(nameof(ModuleInfo), new { Id = m.Id })
+					};
+
+					mNode.Nodes = m.Activities.Select(a =>
+					{
+						var aNode = new TreeViewNode
+						{
+							Text = a.Name,
+							CustomData = Url.Action(nameof(ActivityInfo), new { Id = a.Id })
+						};
+
+						return aNode;
+					}).ToList();
+					mNode.Nodes.Add(new TreeViewNode { Text = "ADD ACTIVITY", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) });
+
+					return mNode;
+				}).ToList();
+				cNode.Nodes.Add(new TreeViewNode { Text = "ADD MODULE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateModule), new { courseId = c.Id }) });
+
+				return cNode;
+			}).ToList();
+			treeData.Add(new TreeViewNode { Text = "ADD COURSE", ClassList = new[] { "node-create" }, CustomData = Url.Action(nameof(CreateCourse)) });
+
+			return new TreeViewModel() { Data = treeData };
+		}
+
 	}
 }
