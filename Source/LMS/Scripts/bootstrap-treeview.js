@@ -523,7 +523,6 @@
 // dsaar-begin : Added customizable classes per node
 			if (node.classList) {
 				node.classList.forEach(function (item) {
-					console.log("ITEM= " + item);
 					treeItem.addClass(item)
 				});
 			}
