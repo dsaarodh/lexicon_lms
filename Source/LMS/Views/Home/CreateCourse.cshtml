@@ -1,9 +1,8 @@
 ﻿@model LMS.Models.AppData.Course
 
-@using (Html.BeginForm()) 
+@using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnCreateFormSuccess" }))
 {
     @Html.AntiForgeryToken()
-//    @AntiForgery.GetHtml()
 
     <div class="form-horizontal">
         <h4>Course</h4>
@@ -43,7 +42,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input id="submitButton" type="button" value="Create" class="btn btn-default" onclick="SubmitForm('@Url.Action("CreateCourse", "Home")')"/>
+				<input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
@@ -53,8 +52,5 @@
     @Html.ActionLink("Back to List", "Index")
 </div>*@
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
 
 

@@ -17,7 +17,6 @@
 @{
 }
 
-
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#schema">Veckoschema (@Model.Calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))</a></li>
     <li><a data-toggle="tab" href="#modules">Moduler</a></li>
@@ -39,73 +38,42 @@
         <p>Some content in menu 2.</p>
     </div>
 
-	<div id="right" class="col-md-6">
-		Massa content
-	</div>
+	<div id="right" class="col-md-6" />
 </div>
 
-@section Scripts
-{
-	<script>
+<script>
 
-		//var SubmitForm = function ()
-		//{ 
-		//	$("#login-form").submit(function() { 
-		//	$('.fail').hide();
-		//	$.ajax({  
-		//		url:"/login",
-		//		type: "post",  
-		//		data: $(this).serialize(),
-		//		error:function(){
-	 //               $('.fail').show();
-		//		},
-		//		success: function(data) {
-	 //               if (data == "y") {
-		//               //Login was successful. Redirect statement here?
-		//			} else {
-		//			//Failed login message here
-		//			}
-		//		}
-		//	});
-		//	return false; 
-		//});
-
-		var SubmitForm = function (action)
+	var OnCreateFormSuccess = function (result)
 		{
-
-			$.ajax(
+			if (result.Success)
 			{
-				type: "POST",
-				url: action,
-				data: $("form").serialize(),
-				success: function (result)
-				{
-						if (result.Success)
-						{
-						//	$("#modulesList").html(result);
-							SetTreeView(result.Data);
-						}
-						else
-						{
-							$("#right").html(result);
-						}
-					}
-			});
+			//	$("#modulesList").html(result);
+				SetTreeView(result.Data);
+			}
+			else
+			{
+				$("#right").html(result);
+			}
 		}
 
-		var SetTreeView = function (data)
-			{
-				$("#modulesList").treeview(
-					{
-						enableLinks: true,
-						data: data,
-						onNodeSelected: function (event, data) { $("#right").load(data.customData); }
-					});
-			}
-
-		$(function ()
+	var SetTreeView = function (data)
 		{
-			SetTreeView(@Html.Raw(@Model.TreeView.JsonData));			
-		})
-	</script>
+			$("#modulesList").treeview(
+				{
+					enableLinks: true,
+					data: data,
+					onNodeSelected: function (event, data) { $("#right").load(data.customData); }
+				});
+		}
+
+
+	window.addEventListener('load', function ()
+		{
+			SetTreeView(@Html.Raw(@Model.TreeView.JsonData));
+		}, true);
+
+</script>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
 }

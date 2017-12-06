@@ -122,7 +122,7 @@ namespace LMS.Controllers
 		}
 
 		[HttpPost]
-//		[ValidateAntiForgeryToken]
+		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult CreateCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
 		{
