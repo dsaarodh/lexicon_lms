@@ -1,5 +1,4 @@
-﻿using LMS.Models;
-using LMS.Models.AppData;
+﻿using LMS.Models.AppData;
 using LMS.Models.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
@@ -15,9 +14,10 @@ namespace LMS.DataAccess
 
         public ApplicationDbContext() : base("LexiconLMSDbConnection", throwIfV1Schema: false)
         {
-        }
+			Database.CreateIfNotExists();
+		}
 
-        public static ApplicationDbContext Create()
+		public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
