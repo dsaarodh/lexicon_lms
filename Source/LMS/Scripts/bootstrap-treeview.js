@@ -142,7 +142,11 @@
 
 			// Search methods
 			search: $.proxy(this.search, this),
-			clearSearch: $.proxy(this.clearSearch, this)
+			clearSearch: $.proxy(this.clearSearch, this),
+
+// dsaar-begin : Need to have access to all nodes for fast searching of custom data
+			getNodes: $.proxy(this.getNodes, this),
+// dsaar-end
 		};
 	};
 
@@ -1218,6 +1222,12 @@
 			}
 		}
 	};
+
+// dsaar-begin : Need to have access to all nodes for fast searching of custom data
+	Tree.prototype.getNodes = function () {
+		return this.nodes;
+	};
+// dsaar-end
 
 	var logError = function (message) {
 		if (window.console) {

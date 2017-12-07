@@ -48,6 +48,18 @@
 			if (result.TreeViewData)
 			{
 				SetTreeView(result.TreeViewData);
+
+				var result = $("#modulesList").treeview('getNodes').find(function (e)
+					{
+						return	(e.customData.type && (e.customData.type === result.CreatedType)) &&
+								(e.customData.id && (e.customData.id ===  result.CreatedTypeId));
+					});
+
+				if (result)
+				{
+					$("#modulesList").treeview('revealNode', [result.nodeId, { silent: true }]);
+					$("#modulesList").treeview('selectNode', [ result.nodeId, { silent: false } ]);
+				}				
 			}
 			else
 			{
@@ -61,10 +73,9 @@
 				{
 					enableLinks: true,
 					data: data,
-					onNodeSelected: function (event, data) { $("#right").load(data.customData); }
+					onNodeSelected: function (event, data) { $("#right").load(data.customData.action); }
 				});
 		}
-
 
 	window.addEventListener('load', function ()
 		{
