@@ -120,14 +120,14 @@ namespace LMS.Controllers
 		public PartialViewResult CreateActivity(int moduleId)
 		{
 			ViewBag.ModuleId = moduleId;
-//			ViewBag.ModuleList = new SelectList(db.Courses, nameof(Module.CourseId), "Name", moduleId);
-			return PartialView();
+			ViewBag.ActivityTypeId = new SelectList(db.ActivityTypes, nameof(Activity.Id), nameof(Activity.Name));
+			return PartialView(new Activity { ModuleId = moduleId });
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult CreateActivity(int moduleId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityType")] Activity activity)
+		public ActionResult CreateActivity(int moduleId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
 		{
 			var module = db.Modules.Find(moduleId);
 			if (ModelState.IsValid && module != null)
@@ -138,7 +138,8 @@ namespace LMS.Controllers
 				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
 			}
 
-//			ViewBag.CourseId = new SelectList(db.Courses, "CourseId", "Name", moduleId);
+			ViewBag.ModuleId = moduleId;
+			ViewBag.ActivityTypeId = new SelectList(db.ActivityTypes, nameof(Activity.Id), nameof(Activity.Name), activity.ActivityTypeId);
 			return PartialView(activity);
 		}
 

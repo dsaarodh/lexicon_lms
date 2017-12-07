@@ -1,10 +1,12 @@
 ﻿using LMS.Models.AppData.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LMS.Models.AppData
 {
 	public class Activity : ActivityBase
     {
+		[Display(Name = "Type")]
 		public int ActivityTypeId { get; set; }
 		public int ModuleId { get; set; }
 
