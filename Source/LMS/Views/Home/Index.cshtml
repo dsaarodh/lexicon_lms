@@ -45,9 +45,9 @@
 
 	var OnCreateFormSuccess = function (result)
 		{
-			if (result.Success)
+			if (result.TreeViewData)
 			{
-				SetTreeView(result.Data);
+				SetTreeView(result.TreeViewData);
 			}
 			else
 			{

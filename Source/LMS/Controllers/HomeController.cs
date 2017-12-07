@@ -8,12 +8,10 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using static LMS.ViewModels.Widgets.TreeViewModel;
-using Newtonsoft.Json;
-using System;
 
 namespace LMS.Controllers
 {
-    public class HomeController : Controller
+	public class HomeController : Controller
 	{
         private ApplicationDbContext db = new ApplicationDbContext();
 
@@ -83,10 +81,10 @@ namespace LMS.Controllers
 			{
 				db.Courses.Add(course);
 				db.SaveChanges();
-				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+
+				return new JsonResult() { Data = new { TreeViewData = TreeView().JsonData } };
 			}
 
-		//	return new JsonResult() { Data = new { Success = false, Data = PartialView(nameof(CreateCourse)) } };
 			return PartialView(course);
 		}
 
@@ -109,7 +107,7 @@ namespace LMS.Controllers
 				course.Modules.Add(module);
 				db.SaveChanges();
 
-				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+				return new JsonResult() { Data = new { TreeViewData = TreeView().JsonData } };
 			}
 
 			return PartialView(module);
@@ -135,7 +133,7 @@ namespace LMS.Controllers
 				module.Activities.Add(activity);
 				db.SaveChanges();
 
-				return new JsonResult() { Data = new { Success = true, Data = TreeView().JsonData } };
+				return new JsonResult() { Data = new { TreeViewData = TreeView().JsonData } };
 			}
 
 			ViewBag.ModuleId = moduleId;
