@@ -8,10 +8,10 @@ namespace LMS.Models.AppData
     {
         public string ColorCode { get; set; }
 
-		//[ForeignKey(nameof(Course))]
-		//public int Course_Id { get; set; }
+		public int CourseId { get; set; }
 
 		// navigational properties
+		[ForeignKey(nameof(CourseId))]
 		public virtual Course Course { get; set; }
         public virtual ICollection<Activity> Activities { get; set; }
     }
