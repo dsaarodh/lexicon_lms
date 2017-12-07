@@ -302,12 +302,15 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\_Schedule.cshtml" />
-    <Content Include="Views\Home\_Course.cshtml" />
-    <Content Include="Views\Home\_Module.cshtml" />
-    <Content Include="Views\Home\_Activity.cshtml" />
-    <Content Include="Views\Home\CreateCourse.cshtml" />
-    <Content Include="Views\Home\CreateModule.cshtml" />
-    <Content Include="Views\Home\CreateActivity.cshtml" />
+    <Content Include="Views\Home\Details\_Course.cshtml" />
+    <Content Include="Views\Home\Details\_Module.cshtml" />
+    <Content Include="Views\Home\Details\_Activity.cshtml" />
+    <Content Include="Views\Home\Create\CreateCourse.cshtml" />
+    <Content Include="Views\Home\Create\CreateModule.cshtml" />
+    <Content Include="Views\Home\Create\CreateActivity.cshtml" />
+    <Content Include="Views\Home\Edit\EditCourse.cshtml" />
+    <Content Include="Views\Home\Edit\EditModule.cshtml" />
+    <Content Include="Views\Home\Edit\EditActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
