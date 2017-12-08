@@ -40,4 +40,5 @@
 </div>
 <p>
 	@Ajax.ActionLink("Edit", nameof(LMS.Controllers.HomeController.EditCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
+	@Ajax.ActionLink("Delete", nameof(LMS.Controllers.HomeController.DeleteCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
 </p>

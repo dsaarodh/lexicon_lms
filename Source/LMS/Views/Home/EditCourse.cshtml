@@ -1,6 +1,6 @@
 ﻿@model LMS.Models.AppData.Course
 
-@using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnCreateEditFormSuccess" }))
+@using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnModifyModelsSuccess" }))
 {
     @Html.AntiForgeryToken()
     

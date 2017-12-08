@@ -43,7 +43,7 @@
 
 <script>
 
-	var OnCreateEditFormSuccess = function (result)
+	var OnModifyModelsSuccess = function (result)
 		{
 			if (result.TreeViewData)
 			{
@@ -66,16 +66,16 @@
 								(e.customData.id && (e.customData.id ===  result.TypeId));
 					});
 				// reveal and select it, triggering onNodeSelected
-				if (result)
+				if (node)
 				{
 					$("#modulesList").treeview('revealNode', [node.nodeId, { silent: true }]);
 					$("#modulesList").treeview('selectNode', [ node.nodeId, { silent: false } ]);
-				}				
+				}
+				else
+					$("#right").html(null);
 			}
 			else
-			{
 				$("#right").html(result);
-			}
 		}
 
 	var SetTreeView = function (data)

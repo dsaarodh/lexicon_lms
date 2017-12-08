@@ -311,6 +311,9 @@
     <Content Include="Views\Home\EditCourse.cshtml" />
     <Content Include="Views\Home\EditModule.cshtml" />
     <Content Include="Views\Home\EditActivity.cshtml" />
+    <Content Include="Views\Home\DeleteCourse.cshtml" />
+    <Content Include="Views\Home\DeleteModule.cshtml" />
+    <Content Include="Views\Home\DeleteActivity.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

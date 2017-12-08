@@ -168,8 +168,6 @@ namespace LMS.Controllers
 			if (id == null)
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-			var userId = User.Identity.GetUserId();
-
 			var course = db.Courses.Find(id);
 			if (course != null)
 			{
@@ -209,8 +207,6 @@ namespace LMS.Controllers
 		{
 			if (id == null)
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-
-			var userId = User.Identity.GetUserId();
 
 			var module = db.Modules.Find(id);
 			if (module != null)
@@ -256,8 +252,6 @@ namespace LMS.Controllers
 			if (id == null)
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-			var userId = User.Identity.GetUserId();
-
 			var activity = db.Activities.Find(id);
 			if (activity != null)
 			{
@@ -297,7 +291,147 @@ namespace LMS.Controllers
 			return PartialView(activity);
 		}
 
-#endregion // Edit
+		#endregion // Edit
+
+
+#region Delete
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+        public ActionResult DeleteCourse(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var course = db.Courses.Find(id);
+			if (course != null)
+			{
+				if (User.IsInRole(Role.Teacher))
+				{
+					// TODO: Add popup verification instead of DeleteConfirmed?
+
+					return PartialView(nameof(DeleteCourse), course);
+				}
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+        }
+
+        [HttpPost, ActionName(nameof(DeleteCourse))]
+        [ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult DeleteCourseConfirmed(int id)
+        {
+			var course = db.Courses.Find(id);
+			if (course != null)
+			{
+				db.Courses.Remove(course);
+				db.SaveChanges();
+
+				return Json(new
+				{
+					Type = nameof(Course),
+					TypeId = 0,
+					TreeViewData = TreeView().JsonData
+				});
+			}
+
+			return new HttpNotFoundResult();
+		}
+		
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+        public ActionResult DeleteModule(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var module = db.Modules.Find(id);
+			if (module != null)
+			{
+				if (User.IsInRole(Role.Teacher))
+				{
+					// TODO: Add popup verification instead of DeleteConfirmed?
+
+					return PartialView(nameof(DeleteModule), module);
+				}
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+        }
+
+        [HttpPost, ActionName(nameof(DeleteModule))]
+        [ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult DeleteModuleConfirmed(int id)
+        {
+			var module = db.Modules.Find(id);
+			if (module != null)
+			{
+				db.Modules.Remove(module);
+				db.SaveChanges();
+
+				return Json(new
+				{
+					Type = nameof(Course),
+					TypeId = module.CourseId, // select parent Course
+					TreeViewData = TreeView().JsonData
+				});
+			}
+
+			return new HttpNotFoundResult();
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+        public ActionResult DeleteActivity(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var activity = db.Activities.Find(id);
+			if (activity != null)
+			{
+				if (User.IsInRole(Role.Teacher))
+				{
+					// TODO: Add popup verification instead of DeleteConfirmed?
+
+					return PartialView(nameof(DeleteActivity), activity);
+				}
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+        }
+
+        [HttpPost, ActionName(nameof(DeleteActivity))]
+        [ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult DeleteActivityConfirmed(int id)
+        {
+			var activity = db.Activities.Find(id);
+			if (activity != null)
+			{
+				db.Activities.Remove(activity);
+				db.SaveChanges();
+
+				return Json(new
+				{
+					Type = nameof(Module),
+					TypeId = activity.ModuleId, // select parent Module
+					TreeViewData = TreeView().JsonData
+				});
+			}
+
+			return new HttpNotFoundResult();
+		}
+
+#endregion // Delete
 
 #region InfoBox
 
