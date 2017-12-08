@@ -85,8 +85,8 @@ namespace LMS.Controllers
 
 				return Json(new
 					{
-						CreatedType = nameof(Course),
-						CreatedTypeId = course.Id,
+						Type = nameof(Course),
+						TypeId = course.Id,
 						TreeViewData = TreeView().JsonData
 					});
 			}
@@ -115,8 +115,8 @@ namespace LMS.Controllers
 
 				return Json(new
 					{
-						CreatedType = nameof(Module),
-						CreatedTypeId = module.Id,
+						Type = nameof(Module),
+						TypeId = module.Id,
 						TreeViewData = TreeView().JsonData
 					});
 			}
@@ -129,7 +129,7 @@ namespace LMS.Controllers
 		public PartialViewResult CreateActivity(int moduleId)
 		{
 			ViewBag.ModuleId = moduleId;
-			ViewBag.ActivityTypeId = new SelectList(db.ActivityTypes, nameof(Activity.Id), nameof(Activity.Name));
+			ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name));
 			return PartialView(new Activity { ModuleId = moduleId });
 		}
 
@@ -146,14 +146,14 @@ namespace LMS.Controllers
 
 				return Json(new
 					{
-						CreatedType = nameof(Activity),
-						CreatedTypeId = activity.Id,
+						Type = nameof(Activity),
+						TypeId = activity.Id,
 						TreeViewData = TreeView().JsonData
 					});
 			}
 
 			ViewBag.ModuleId = moduleId;
-			ViewBag.ActivityTypeId = new SelectList(db.ActivityTypes, nameof(Activity.Id), nameof(Activity.Name), activity.ActivityTypeId);
+			ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name), activity.ActivityTypeId);
 			return PartialView(activity);
 		}
 
@@ -161,6 +161,7 @@ namespace LMS.Controllers
 
 #region Edit
 
+		[HttpGet]
 		[Authorize(Roles = Role.Teacher)]
         public ActionResult EditCourse(int? id)
         {
@@ -172,7 +173,7 @@ namespace LMS.Controllers
 			var course = db.Courses.Find(id);
 			if (course != null)
 			{
-				if (User.IsInRole(Role.Teacher) || course.Users.Any(u => u.Id.Equals(userId)))
+				if (User.IsInRole(Role.Teacher)) // TODO: Is this needed?
 					return PartialView(nameof(EditCourse), course);
 				else
 					return new HttpUnauthorizedResult();
@@ -183,17 +184,117 @@ namespace LMS.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult EditCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
 		{
 			if (ModelState.IsValid)
 			{
 				db.Entry(course).State = EntityState.Modified;
 				db.SaveChanges();
 
-				return new JsonResult() { Data = new { TreeViewData = TreeView().JsonData } };
+				return Json(new
+				{
+					Type = nameof(Course),
+					TypeId = course.Id,
+					TreeViewData = TreeView().JsonData
+				});
 			}
 
 			return PartialView(course);
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult EditModule(int? id)
+		{
+			if (id == null)
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var userId = User.Identity.GetUserId();
+
+			var module = db.Modules.Find(id);
+			if (module != null)
+			{
+				if (User.IsInRole(Role.Teacher))
+				{
+					ViewBag.CoursesList = new SelectList(db.Courses, nameof(Course.Id), nameof(Course.Name), module.CourseId);
+					return PartialView(nameof(EditModule), module);
+				}
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult EditModule([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Module module)
+		{
+			if (ModelState.IsValid)
+			{
+				db.Entry(module).State = EntityState.Modified;
+				db.SaveChanges();
+
+				return Json(new
+				{
+					Type = nameof(Module),
+					TypeId = module.Id,
+					TreeViewData = TreeView().JsonData
+				});
+			}
+
+			ViewBag.CoursesList = new SelectList(db.Courses, nameof(Course.Id), nameof(Course.Name), module.CourseId);
+			return PartialView(module);
+		}
+
+		[HttpGet]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult EditActivity(int? id)
+		{
+			if (id == null)
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var userId = User.Identity.GetUserId();
+
+			var activity = db.Activities.Find(id);
+			if (activity != null)
+			{
+				if (User.IsInRole(Role.Teacher))
+				{
+					ViewBag.ModulesList = new SelectList(db.Modules, nameof(Module.Id), nameof(Module.Name), activity.ModuleId);
+					ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name), activity.ActivityTypeId);
+					return PartialView(nameof(EditActivity), activity);
+				}
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		[Authorize(Roles = Role.Teacher)]
+		public ActionResult EditActivity([Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
+		{
+			if (ModelState.IsValid)
+			{
+				db.Entry(activity).State = EntityState.Modified;
+				db.SaveChanges();
+
+				return Json(new
+				{
+					Type = nameof(Activity),
+					TypeId = activity.Id,
+					TreeViewData = TreeView().JsonData
+				});
+			}
+
+			ViewBag.ModulesList = new SelectList(db.Modules, nameof(Module.Id), nameof(Module.Name), activity.ModuleId);
+			ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name), activity.ActivityTypeId);
+			return PartialView(activity);
 		}
 
 #endregion // Edit

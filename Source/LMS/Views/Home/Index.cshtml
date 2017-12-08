@@ -43,33 +43,33 @@
 
 <script>
 
-	var OnCreateFormSuccess = function (result)
+	var OnCreateEditFormSuccess = function (result)
 		{
 			if (result.TreeViewData)
 			{
 				// cache expanded nodes
 				var expandedNodesIdentifiers = [];
-				$("#modulesList").treeview('getNodes').forEach(function (node) { if (node.state.expanded) { expandedNodesIdentifiers.push(node.customData.action); } });
+				$("#modulesList").treeview('getNodes').forEach(function (n) { if (n.state.expanded) { expandedNodesIdentifiers.push(n.customData.action); } });
 				// update tree data
 				SetTreeView(result.TreeViewData);
 				// re-expand cached nodes
-				$("#modulesList").treeview('getNodes').forEach(function (node)
+				$("#modulesList").treeview('getNodes').forEach(function (n)
 					{
-						if (expandedNodesIdentifiers.find(function (e) { return node.customData.action === e; }))
-							$('#modulesList').treeview('expandNode', [ node.nodeId, { levels: 1, silent: true } ]);
+						if (expandedNodesIdentifiers.find(function (e) { return n.customData.action === e; }))
+							$('#modulesList').treeview('expandNode', [ n.nodeId, { levels: 1, silent: true } ]);
 					});
 
 				// find the newly created node in the treeview
-				var result = $("#modulesList").treeview('getNodes').find(function (e)
+				var node = $("#modulesList").treeview('getNodes').find(function (e)
 					{
-						return	(e.customData.type && (e.customData.type === result.CreatedType)) &&
-								(e.customData.id && (e.customData.id ===  result.CreatedTypeId));
+						return	(e.customData.type && (e.customData.type === result.Type)) &&
+								(e.customData.id && (e.customData.id ===  result.TypeId));
 					});
 				// reveal and select it, triggering onNodeSelected
 				if (result)
 				{
-					$("#modulesList").treeview('revealNode', [result.nodeId, { silent: true }]);
-					$("#modulesList").treeview('selectNode', [ result.nodeId, { silent: false } ]);
+					$("#modulesList").treeview('revealNode', [node.nodeId, { silent: true }]);
+					$("#modulesList").treeview('selectNode', [ node.nodeId, { silent: false } ]);
 				}				
 			}
 			else

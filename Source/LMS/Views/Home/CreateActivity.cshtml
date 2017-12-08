@@ -1,6 +1,6 @@
 ﻿@model LMS.Models.AppData.Activity
 
-@using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnCreateFormSuccess" }))
+@using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnCreateEditFormSuccess" }))
 {
     @Html.AntiForgeryToken()
     
@@ -43,7 +43,7 @@
 		<div class="form-group">
 			@Html.LabelFor(model => model.ActivityTypeId, htmlAttributes: new { @class = "control-label col-md-2" })
 			<div class="col-md-10">
-				@Html.DropDownList("ActivityTypeId", (SelectList)ViewBag.ActivityTypeId, "Please select", htmlAttributes: new { @class = "form-control" })
+				@Html.DropDownListFor(model => model.ActivityTypeId, (SelectList)ViewBag.ActivityTypeList, "Please select", htmlAttributes: new { @class = "form-control" })
 				@Html.ValidationMessageFor(model => model.ActivityTypeId, "", new { @class = "text-danger" })
 			</div>
 		</div>
