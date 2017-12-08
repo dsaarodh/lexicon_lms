@@ -315,9 +315,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\Images\" />
-    <Folder Include="Views\Home\Create\" />
-    <Folder Include="Views\Home\Details\" />
-    <Folder Include="Views\Home\Edit\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
