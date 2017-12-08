@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using static LMS.ViewModels.Widgets.TreeViewModel;
 
@@ -142,6 +143,45 @@ namespace LMS.Controllers
 		}
 
 #endregion // Create
+
+#region Edit
+
+		[Authorize(Roles = Role.Teacher)]
+        public ActionResult EditCourse(int? id)
+        {
+			if (id == null)
+				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+			var userId = User.Identity.GetUserId();
+
+			var course = db.Courses.Find(id);
+			if (course != null)
+			{
+				if (User.IsInRole(Role.Teacher) || course.Users.Any(u => u.Id.Equals(userId)))
+					return PartialView(nameof(EditCourse), course);
+				else
+					return new HttpUnauthorizedResult();
+			}
+			else
+				return new HttpNotFoundResult();
+		}
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		{
+			if (ModelState.IsValid)
+			{
+				db.Entry(course).State = EntityState.Modified;
+				db.SaveChanges();
+
+				return new JsonResult() { Data = new { TreeViewData = TreeView().JsonData } };
+			}
+
+			return PartialView(course);
+		}
+
+#endregion // Edit
 
 #region InfoBox
 
