@@ -23,11 +23,14 @@ namespace LMS
 
 			bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
 					  "~/Scripts/bootstrap.js",
-					  "~/Scripts/respond.js"));
+					  "~/Scripts/respond.js",
+					  "~/Scripts/bootstrap-treeview.js",
+					  "~/Scripts/bootstrap-multiselect.js"));
 
 			bundles.Add(new StyleBundle("~/Content/css").Include(
 					  "~/Content/Styles/bootstrap.css",
-					  "~/Content/Styles/site.css"));
+					  "~/Content/Styles/site.css",
+					  "~/Content/Styles/bootstrap-multiselect.css"));
 		}
 	}
 }

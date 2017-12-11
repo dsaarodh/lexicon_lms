@@ -228,6 +228,7 @@
     <Compile Include="ViewModels\Widgets\TreeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Styles\bootstrap-multiselect.css" />
     <Content Include="Content\Styles\bootstrap-theme.css" />
     <Content Include="Content\Styles\bootstrap-theme.min.css" />
     <Content Include="Content\Styles\bootstrap-treeview.css" />
@@ -249,6 +250,8 @@
     <Content Include="Content\Styles\bootstrap-theme.css.map" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Icon.png" />
+    <Content Include="Scripts\bootstrap-multilist.js" />
+    <Content Include="Scripts\bootstrap-multiselect.js" />
     <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap-treeview.min.js" />
     <Content Include="Scripts\bootstrap.js" />
