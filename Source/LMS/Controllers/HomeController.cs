@@ -30,7 +30,7 @@ namespace LMS.Controllers
             scheduleVM.Course = new Course();
             if (!User.IsInRole(Role.Teacher))
             {
-                scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
+               // scheduleVM.Course.Name = db.Courses.Where(co => courseId != null ? co.Id == courseId : false).Select(n => n.Name).FirstOrDefault().ToString();
             }
 
                 
