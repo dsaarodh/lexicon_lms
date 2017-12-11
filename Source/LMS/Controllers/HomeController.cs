@@ -168,11 +168,20 @@ namespace LMS.Controllers
 			if (id == null)
 				return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-			var course = db.Courses.Find(id);
+			var course = db.Courses.SingleOrDefault(c => c.Id == id);
 			if (course != null)
 			{
 				if (User.IsInRole(Role.Teacher)) // TODO: Is this needed?
+				{
+					var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
+					var studentUsers = db.Users
+						.Where(u => u.Roles
+							.Select(r => r.RoleId)
+							.Contains(identityRole.Id));
+
+					ViewBag.Users = studentUsers;
 					return PartialView(nameof(EditCourse), course);
+				}
 				else
 					return new HttpUnauthorizedResult();
 			}
@@ -183,10 +192,29 @@ namespace LMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult EditCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		public ActionResult EditCourse(object[] userIds, [Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
 		{
 			if (ModelState.IsValid)
 			{
+				var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
+				var studentUsers = db.Users
+					.Where(u => u.Roles
+						.Select(r => r.RoleId)
+						.Contains(identityRole.Id))
+					.ToArray()
+					.Where(u => userIds.Contains(u.Id) || u.CourseId == course.Id);
+
+				// TODO: Verification for removed users?
+				foreach (var u in studentUsers)
+				{
+					if (userIds.Contains(u.Id))
+						u.CourseId = course.Id;
+					else if (u.CourseId == course.Id)
+						u.CourseId = null;
+
+					db.Entry(u).State = EntityState.Modified;
+				}
+
 				db.Entry(course).State = EntityState.Modified;
 				db.SaveChanges();
 
