@@ -83,31 +83,35 @@ textarea {
 }
 
 .lines {
-    z-index: 1;
+    z-index: 100;
 }
 
 .module {
-    background: #dcfee1;
-    display: inline-block;
-    padding: 3px 10px 3px 10px;
-    top: 0;
-    text-align: center;
-    margin: 0;
+	background: #dcfee1aa;
+	display: inline-block;
+	padding: 3px 10px 3px 10px;
+	top: 0;
+	text-align: left;
+	margin: 0;
+	z-index: 10;
+	font-size: x-small;
 }
 
 .Activity {
-    font-size: x-small;
-    color: #2a376b;
+	font-size: small;
+	color: #2a376b;
+	z-index: 10;
 }
 .lunch {
-    border: 1px solid #e1d4c2;
-    background-color: antiquewhite;
-    display: inline-block;
-    padding: 3px 10px 3px 10px;
-    top: 0;
-    bottom: 0;
-    text-align: center;
-    margin: 0;
+	border: 1px solid #e1d4c2;
+	background-color: antiquewhite;
+	display: inline-block;
+	padding: 3px 10px 3px 10px;
+	top: 0;
+	bottom: 0;
+	text-align: center;
+	margin: 0;
+	z-index: 1;
 }
 
 #container {

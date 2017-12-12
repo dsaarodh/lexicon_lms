@@ -5,14 +5,6 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ColorCode)
-        </dt>
-
-        <dd>
-            <div style="background-color: @Model.ColorCode; width: 40px; height: 18px"></div>
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.Name)
         </dt>
 
@@ -43,6 +35,14 @@
         <dd>
             @Html.DisplayFor(model => model.EndDate)
         </dd>
+
+		<dt>
+			@Html.DisplayNameFor(model => model.ColorCode)
+		</dt>
+
+		<dd>
+			<div style="background-color: @Model.ColorCode; width: 40px; height: 18px"></div>
+		</dd>
 
     </dl>
 </div>

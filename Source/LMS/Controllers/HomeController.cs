@@ -27,9 +27,7 @@ namespace LMS.Controllers
         public ActionResult Index()
         {
 
-            var scheduleVM = new ScheduleViewModels();
-            CultureInfo cultureInfo = new CultureInfo("sv-SE");
-            scheduleVM.Calendar = cultureInfo.Calendar;
+            var scheduleVM = new ScheduleViewModels() { Calendar = CultureInfo.CurrentCulture.Calendar };
             var userId = User.Identity.GetUserId();
             var courseId = db.Users.Find(userId).CourseId;
 
@@ -683,15 +681,8 @@ namespace LMS.Controllers
             var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
 //            var newDate = cal.AddWeeks(DateTime.Now, scheduleVM.CurrentWeek);
 
-            if (move == "prev")
-            {
-       
-                scheduleVM.WeekStartDate = start.AddDays(-7);
-            }
-            else
-            {
-                scheduleVM.WeekStartDate = end.AddDays(7);
-            }
+			scheduleVM.WeekStartDate = move == "prev" ? start.AddDays(-7) : start.AddDays(7);
+
 
             //var scheduleVM = new ScheduleViewModels();
 //            CultureInfo cultureInfo = new CultureInfo("sv-SE");
@@ -702,9 +693,7 @@ namespace LMS.Controllers
 
             scheduleVM.Course = new Course();
             if (!User.IsInRole(Role.Teacher))
-            {
                 scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
-            }
 
             scheduleVM.Days = new List<Day>();
             scheduleVM.Activities = db.Activities
@@ -713,16 +702,11 @@ namespace LMS.Controllers
 
             for (int i = 0; i < 7; i++)
             {
-                Day day = new Day
-                {
-                    Date = scheduleVM.WeekStartDate.AddDays(i)
-                };
+                Day day = new Day { Date = scheduleVM.WeekStartDate.AddDays(i) };
 
                 if (courseId != null)
-                {
-
                     day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
-                }
+
                 if (day.Modules != null)
                 {
                     for (int j = 0; j < day.Modules.Count; j++)
@@ -730,13 +714,12 @@ namespace LMS.Controllers
                         day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
                     }
                 }
+
                 scheduleVM.Days.Add(day);
             }
 
             if (!User.Identity.IsAuthenticated)
-            {
                 return PartialView("_Schedule", scheduleVM);
-            }
 
             return PartialView("_Schedule", scheduleVM);
         }

@@ -9,10 +9,10 @@ namespace LMS.ViewModels
     public class ScheduleViewModels
     {
         public Calendar Calendar { get; set; }
-        public DateTime WeekStartDate { get; set; } = new DateTime(2017, 08, 30);
+        public DateTime WeekStartDate { get; set; } = DateTime.Now;
         public DateTime WeekEndDate => WeekStartDate.AddDays(7);
         public Course Course { get; set; }
-        public DateTime FirstDayOfWeek { get => WeekStartDate.AddDays(-(WeekStartDate.DayOfWeek - new CultureInfo("sv-SE").DateTimeFormat.FirstDayOfWeek)); }
+        public DateTime FirstDayOfWeek { get => WeekStartDate.AddDays(-(WeekStartDate.DayOfWeek - CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)); }
         public List<Day> Days { get; set; }
         public int CurrentWeek { get; set; }
 

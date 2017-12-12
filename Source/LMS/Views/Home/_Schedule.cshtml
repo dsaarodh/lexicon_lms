@@ -31,27 +31,26 @@
             </td>
             <td style="padding: 0; position:relative;">
                 @foreach (var a in Model.Activities)
-                {
-                    if (a.StartDate.Date <= @day.Date && a.EndDate.Date >= @day.Date && a.Module != null)
-                    {
-                        Color c = new Color();
-                        c = Color.FromArgb(33, 33, 33);
-                        Color color = a.Module.ColorCode != null ? System.Drawing.ColorTranslator.FromHtml(a.Module.ColorCode) : c;
-                        System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1, Math.Max(color.R - 30, 0), Math.Max(color.G - 30, 0), Math.Max(color.B - 30, 0));
-                        var x = String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
+				{
+					if (a.StartDate.Date <= @day.Date && a.EndDate.Date >= @day.Date && a.Module != null)
+					{
+						Color color = (a.Module.ColorCode != null) ? ColorTranslator.FromHtml(a.Module.ColorCode) : Color.LightGray;
+						System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1, Math.Max(color.R - 30, 0), Math.Max(color.G - 30, 0), Math.Max(color.B - 30, 0));
+						var x = ColorTranslator.ToHtml(darkColor);
+						//var x = String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
                         <div class="module"
                              data-start="@(a.StartDate.Hour + Math.Round(((double)a.StartDate.Minute * 100) / 60, 0) * 0.01)"
                              data-end="@(a.EndDate.Hour + Math.Round(((double)a.EndDate.Minute * 100) / 60, 0) * 0.01)"
                              style="background-color: @a.Module.ColorCode; border: 1px solid @x;">
                             @*<div class="module" style="background-color: @a.Module.ColorCode; border: 1px solid @ColorShade(@a.Module.ColorCode);">*@
-							@Ajax.ActionLink(a.Module.Name, nameof(LMS.Controllers.HomeController.ModuleInfo), new { id = a.ModuleId }, new AjaxOptions { UpdateTargetId = "right" })
-                            <br>
 							@Ajax.ActionLink(a.Name, nameof(LMS.Controllers.HomeController.ActivityInfo), new { id = a.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "Activity" })
+                            <br>
+							@Ajax.ActionLink(a.Module.Name, nameof(LMS.Controllers.HomeController.ModuleInfo), new { id = a.ModuleId }, new AjaxOptions { UpdateTargetId = "right" })
                         </div>
-                    }
+					}
 
-                    if (a.EndDate.Hour == 12)
-                    {
+					//if (a.EndDate.Hour == 12)
+					{
                         <div onclick="GetTimePosition('lunch', 'container')" class="lunch" data-start="12" data-end="13">
                             <span class="glyphicon glyphicon-apple"></span>
                         </div>
