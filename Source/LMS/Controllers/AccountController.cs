@@ -12,6 +12,7 @@ using LMS.DataAccess;
 using LMS.ViewModels;
 using LMS.ViewModels.Identity;
 using LMS.Models.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LMS.Controllers
 {
@@ -20,6 +21,7 @@ namespace LMS.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -139,26 +141,47 @@ namespace LMS.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = Role.Teacher)]
         public ActionResult Register()
         {
+            var roleStore = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roles = roleManager.Roles.ToList();
+            ViewBag.RoleList = new SelectList(roles, "Id", "Name");
+
             return View();
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = Role.Teacher)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    LastName = model.LastName,
+                    FirstName = model.FirstName,
+                    PersonalIdentityNumber = model.PersonalIdentityNumber,
+                    CourseId = null };
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    var roleStore = new RoleStore<IdentityRole>(db);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    var role = roleManager.Roles.Where(n => n.Id == model.RoleId).FirstOrDefault();
+
+                    var userStore = new UserStore<ApplicationUser>(db);
+                    var userManager = new UserManager<ApplicationUser>(userStore);
+                    userManager.AddToRole(user.Id, role.Name);
+
+
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -166,7 +189,7 @@ namespace LMS.Controllers
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("UserManager", "Home");
                 }
                 AddErrors(result);
             }

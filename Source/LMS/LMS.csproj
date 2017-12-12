@@ -225,6 +225,7 @@
     <Compile Include="ViewModels\ScheduleViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\UserManagerViewModel.cs" />
     <Compile Include="ViewModels\Widgets\TreeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +315,7 @@
     <Content Include="Views\Home\DeleteCourse.cshtml" />
     <Content Include="Views\Home\DeleteModule.cshtml" />
     <Content Include="Views\Home\DeleteActivity.cshtml" />
+    <Content Include="Views\Home\UserManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -21,5 +21,7 @@ namespace LMS.DataAccess
         {
             return new ApplicationDbContext();
         }
+
+       // public System.Data.Entity.DbSet<LMS.ViewModels.UserManagerViewModel> UserManagerViewModels { get; set; }
     }
 }

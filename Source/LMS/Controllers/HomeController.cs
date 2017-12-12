@@ -1,12 +1,14 @@
 ﻿using LMS.DataAccess;
 using LMS.Models.AppData;
 using LMS.Models.AppData.Base;
+using LMS.Models.Identity;
 using LMS.ViewModels;
 using LMS.ViewModels.Widgets;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.Drawing;
 using System.Globalization;
@@ -35,7 +37,7 @@ namespace LMS.Controllers
             scheduleVM.Course = new Course();
             if (!User.IsInRole(Role.Teacher))
             {
-                scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
+               // scheduleVM.Course.Name = db.Courses.Where(co => courseId != null ? co.Id == courseId : false).Select(n => n.Name).FirstOrDefault().ToString();
             }
 
                 
@@ -68,6 +70,43 @@ namespace LMS.Controllers
 
 			return View();
 		}
+
+
+        [Authorize(Roles = Role.Teacher)]
+        public ActionResult UserManager()
+        {
+            var roleStore = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roles = roleManager.Roles.ToList();
+
+            var userStore = new UserStore<Models.Identity.ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            var model = db.Users.Include(p => p.Course).Select(u => new UserManagerViewModel
+            {
+                Id = u.Id,
+                LastName = u.LastName,
+                FirstName = u.FirstName,
+                Email = u.Email,
+                Course = u.Course.Name
+            }
+            ).ToList();
+
+            foreach (var umv in model)
+            {
+                var rolesForId = userManager.GetRoles(umv.Id);
+                string temp = "";
+
+                foreach (var r in rolesForId)
+                {
+                    temp += r + " ";
+                }
+
+                umv.Role = temp;
+            }
+
+            return View(model);
+        }
 
 #region Create
 
