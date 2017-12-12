@@ -1,8 +1,10 @@
 ﻿using LMS.DataAccess;
 using LMS.Models.AppData;
+using LMS.Models.Identity;
 using LMS.ViewModels;
 using LMS.ViewModels.Widgets;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
@@ -63,6 +65,43 @@ namespace LMS.Controllers
 
 			return View();
 		}
+
+
+        [Authorize(Roles = Role.Teacher)]
+        public ActionResult UserManager()
+        {
+            var roleStore = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roles = roleManager.Roles.ToList();
+
+            var userStore = new UserStore<Models.Identity.ApplicationUser>(db);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+
+            var model = db.Users.Include(p => p.Course).Select(u => new UserManagerViewModel
+            {
+                Id = u.Id,
+                LastName = u.LastName,
+                FirstName = u.FirstName,
+                Email = u.Email,
+                Course = u.Course.Name
+            }
+            ).ToList();
+
+            foreach (var umv in model)
+            {
+                var rolesForId = userManager.GetRoles(umv.Id);
+                string temp = "";
+
+                foreach (var r in rolesForId)
+                {
+                    temp += r + " ";
+                }
+
+                umv.Role = temp;
+            }
+
+            return View(model);
+        }
 
 #region Create
 
