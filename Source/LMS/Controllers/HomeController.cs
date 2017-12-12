@@ -373,7 +373,6 @@ namespace LMS.Controllers
 
 		#endregion // Edit
 
-
 #region Delete
 
 		[HttpGet]
@@ -573,9 +572,9 @@ namespace LMS.Controllers
 						cNode.Nodes = c.Modules
 							.OrderBy(m => m.Name)
 							.Select(m =>
-            {
+								{
 									var mNode = new TreeViewNode
-                {
+										{
 											Text = m.Name,
 											CustomData = new { Type = nameof(Module), Id = m.Id, Action = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) }
 										};
@@ -588,10 +587,10 @@ namespace LMS.Controllers
 										.Select(a =>
 											{
 												var aNode = new TreeViewNode
-            {
-													Text = a.Name,
-													CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
-            };
+													{
+														Text = a.Name,
+														CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
+													};
 
 												return aNode;
 											}).ToList();
@@ -604,7 +603,7 @@ namespace LMS.Controllers
 												ClassList = new[] { "node-create" },
 												CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
 											});
-        }
+									}
 
 									return mNode;
 								}).ToList();
@@ -612,7 +611,7 @@ namespace LMS.Controllers
 						if (isTeacher)
 						{ 
 							cNode.Nodes.Add(new TreeViewNode
-		{
+								{
 									Text = "ADD MODULE",
 									ClassList = new[] { "node-create" },
 									CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
@@ -625,7 +624,7 @@ namespace LMS.Controllers
 			if (isTeacher)
 			{ 
 				treeData.Add(new TreeViewNode
-		{
+					{
 						Text = "ADD COURSE",
 						ClassList = new[] { "node-create" },
 						CustomData = new { Type = nameof(Course), Action = Url.Action(nameof(CreateCourse)) }

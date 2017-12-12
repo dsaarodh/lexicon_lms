@@ -20,7 +20,6 @@
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#schema">Veckoschema (@Model.Calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))</a></li>
     <li><a data-toggle="tab" href="#modules">Moduler</a></li>
-    <li><a data-toggle="tab" href="#info">Kursinfo</a></li>
 </ul>
 
 <div class="tab-content row">
@@ -29,16 +28,14 @@
             @Html.Partial("_Schedule", Model)
         </div>
     </div>
+
     <div id="modules" class="tab-pane fade">
 		<div class="col-md-6">
-			<div id="modulesList"/>
+			<div id="modulesList"></div>
 		</div>
 	</div>
-    <div id="info" class="tab-pane fade">
-        <p>Some content in menu 2.</p>
-    </div>
 
-	<div id="right" class="col-md-6" />
+	<div id="right" class="col-md-6"></div>
 </div>
 
 <script>

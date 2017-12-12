@@ -44,9 +44,9 @@
                              data-end="@(a.EndDate.Hour + Math.Round(((double)a.EndDate.Minute * 100) / 60, 0) * 0.01)"
                              style="background-color: @a.Module.ColorCode; border: 1px solid @x;">
                             @*<div class="module" style="background-color: @a.Module.ColorCode; border: 1px solid @ColorShade(@a.Module.ColorCode);">*@
-                            @Ajax.ActionLink(a.Module.Name, "Module", new { moduleId = a.Module.Id }, new AjaxOptions { UpdateTargetId = "right" })
+							@Ajax.ActionLink(a.Module.Name, nameof(LMS.Controllers.HomeController.ModuleInfo), new { id = a.ModuleId }, new AjaxOptions { UpdateTargetId = "right" })
                             <br>
-                            @Ajax.ActionLink(a.Name, "Activity", new { activityId = a.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "Activity" })
+							@Ajax.ActionLink(a.Name, nameof(LMS.Controllers.HomeController.ActivityInfo), new { id = a.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "Activity" })
                         </div>
                     }
 
@@ -63,8 +63,8 @@
     <tfoot>
         <tr>
             <td colspan="2">
-                @Ajax.ActionLink("<< Föregående vecka", "GetWeek", new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "prev" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default" })
-                @Ajax.ActionLink("Följande vecka >>", "GetWeek", new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "next" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
+                @Ajax.ActionLink("<< Föregående vecka", nameof(LMS.Controllers.HomeController.GetWeek), new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "prev" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default" })
+                @Ajax.ActionLink("Följande vecka >>", nameof(LMS.Controllers.HomeController.GetWeek), new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "next" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
             </td>
         </tr>
     </tfoot>
