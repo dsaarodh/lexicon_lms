@@ -14,7 +14,7 @@ namespace LMS.ViewModels.Widgets
 	public class TreeViewModel
 	{
 		[JsonIgnore]
-		public string JsonObject => JsonConvert.SerializeObject(this, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+		public string JsonData => JsonConvert.SerializeObject(Data, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
 
 		public bool EnableLinks { get; set; }
 		public bool ShowTags { get; set; }
@@ -38,11 +38,12 @@ namespace LMS.ViewModels.Widgets
 		{
 			public string Text { get; set; }
 			public string Icon { get; set; }
+			public string[] ClassList { get; set; }
 			public string SelectedIcon { get; set; }
 			public Color Color { get; set; }
 			public Color BackColor { get; set; }
 			public string Href { get; set; }
-			public bool Selectable { get; set; }
+			public bool Selectable { get; set; } = true;
 			public TreeViewNodeState State { get; set; }
 			public string[] Tags { get; set; }
 			public ICollection<TreeViewNode> Nodes { get; set; } = new List<TreeViewNode>();
@@ -54,6 +55,8 @@ namespace LMS.ViewModels.Widgets
 				public bool Expanded { get; set; }
 				public bool Selected { get; set; }
 			}
+
+			public object CustomData { get; set; }
 		}
 
 		/*

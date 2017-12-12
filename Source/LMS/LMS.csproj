@@ -208,6 +208,10 @@
     <Compile Include="Migrations\201711281224121_AddModels_Course_Module_Activity_ActivityType.Designer.cs">
       <DependentUpon>201711281224121_AddModels_Course_Module_Activity_ActivityType.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201712071006424_Module_Activity_NavigationalPropertyIds.cs" />
+    <Compile Include="Migrations\201712071006424_Module_Activity_NavigationalPropertyIds.Designer.cs">
+      <DependentUpon>201712071006424_Module_Activity_NavigationalPropertyIds.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AppData\Activity.cs" />
     <Compile Include="Models\AppData\Base\ActivityBase.cs" />
@@ -221,6 +225,7 @@
     <Compile Include="ViewModels\ScheduleViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\UserManagerViewModel.cs" />
     <Compile Include="ViewModels\Widgets\TreeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -302,6 +307,16 @@
     <Content Include="Views\Home\_Course.cshtml" />
     <Content Include="Views\Home\_Module.cshtml" />
     <Content Include="Views\Home\_Activity.cshtml" />
+    <Content Include="Views\Home\CreateCourse.cshtml" />
+    <Content Include="Views\Home\CreateModule.cshtml" />
+    <Content Include="Views\Home\CreateActivity.cshtml" />
+    <Content Include="Views\Home\EditCourse.cshtml" />
+    <Content Include="Views\Home\EditModule.cshtml" />
+    <Content Include="Views\Home\EditActivity.cshtml" />
+    <Content Include="Views\Home\DeleteCourse.cshtml" />
+    <Content Include="Views\Home\DeleteModule.cshtml" />
+    <Content Include="Views\Home\DeleteActivity.cshtml" />
+    <Content Include="Views\Home\UserManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -316,6 +331,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201711281224121_AddModels_Course_Module_Activity_ActivityType.resx">
       <DependentUpon>201711281224121_AddModels_Course_Module_Activity_ActivityType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201712071006424_Module_Activity_NavigationalPropertyIds.resx">
+      <DependentUpon>201712071006424_Module_Activity_NavigationalPropertyIds.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

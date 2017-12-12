@@ -142,7 +142,11 @@
 
 			// Search methods
 			search: $.proxy(this.search, this),
-			clearSearch: $.proxy(this.clearSearch, this)
+			clearSearch: $.proxy(this.clearSearch, this),
+
+// dsaar-begin : Need to have access to all nodes for fast searching of custom data
+			getNodes: $.proxy(this.getNodes, this),
+// dsaar-end
 		};
 	};
 
@@ -520,6 +524,14 @@
 				.attr('data-nodeid', node.nodeId)
 				.attr('style', _this.buildStyleOverride(node));
 
+// dsaar-begin : Added customizable classes per node
+			if (node.classList) {
+				node.classList.forEach(function (item) {
+					treeItem.addClass(item)
+				});
+			}
+// dsaar-end
+
 			// Add indent/spacer to mimic tree structure
 			for (var i = 0; i < (level - 1); i++) {
 				treeItem.append(_this.template.indent);
@@ -527,7 +539,8 @@
 
 			// Add expand, collapse or empty spacer icons
 			var classList = [];
-// dsaar-begin
+
+// dsaar-begin : Fix for initialized, but empty, list
 			if (node.nodes && node.nodes.length > 0)
 // dsaar-end
 			{
@@ -1209,6 +1222,12 @@
 			}
 		}
 	};
+
+// dsaar-begin : Need to have access to all nodes for fast searching of custom data
+	Tree.prototype.getNodes = function () {
+		return this.nodes;
+	};
+// dsaar-end
 
 	var logError = function (message) {
 		if (window.console) {

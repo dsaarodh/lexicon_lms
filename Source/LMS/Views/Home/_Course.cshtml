@@ -36,9 +36,24 @@
             @Html.DisplayFor(model => model.EndDate)
         </dd>
 
+		<dt>
+			@Html.DisplayNameFor(model => model.Users)
+		</dt>
+		<dd>
+			<ul style="padding-left: 20px; overflow: auto;">
+				@foreach (var u in Model.Users)
+				{
+					<li>@Html.DisplayFor(model => u.FullName)</li>
+				}	
+			</ul>
+		</dd>
+
     </dl>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+@if (User.IsInRole(LMS.Controllers.Role.Teacher))
+{
+	<p>
+		@Ajax.ActionLink("Edit", nameof(LMS.Controllers.HomeController.EditCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
+		@Ajax.ActionLink("Delete", nameof(LMS.Controllers.HomeController.DeleteCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
+	</p>
+}

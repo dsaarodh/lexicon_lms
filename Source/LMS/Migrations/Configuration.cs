@@ -28,24 +28,16 @@ namespace LMS.Migrations
 
 			var lmsSeedData = CreateLMSSeedData();
 
-			// Seed ActivityType
-			foreach (var activityType in lmsSeedData.ActivityTypes)
-				context.ActivityTypes.AddOrUpdate(at => at.Name, activityType);
+			context.ActivityTypes.AddOrUpdate(at => at.Name, lmsSeedData.ActivityTypes);
 			context.SaveChanges();
 
-			// Seed Course
-			foreach (var course in lmsSeedData.Courses)
-				context.Courses.AddOrUpdate(c => c.Name, course);
+			context.Courses.AddOrUpdate(c => c.Name, lmsSeedData.Courses);
 			context.SaveChanges();
 
-			// Seed Module
-			foreach (var module in lmsSeedData.Modules)
-				context.Modules.AddOrUpdate(m => m.Name, module);
+			context.Modules.AddOrUpdate(m => m.Name, lmsSeedData.Modules);
 			context.SaveChanges();
 
-			// Seed Activity
-			foreach (var activity in lmsSeedData.Activities)
-				context.Activities.AddOrUpdate(a => a.Name, activity);
+			context.Activities.AddOrUpdate(a => a.Name, lmsSeedData.Activities);
 			context.SaveChanges();
 
 			SeedIdentities(context, lmsSeedData.Courses);
@@ -62,124 +54,21 @@ namespace LMS.Migrations
 				new ActivityType { Name = "Assignment" }
 			};
 
-			var activities = new[]
+			var courses = new[]
 			{
-				new Activity
+				new Course
 				{
-					Name = "C# Intro 1",
-					Description = "Introduktion till C#",
-					StartDate = new DateTime(2017, 8 , 30, 8, 30, 00),
-					EndDate =  new DateTime(2017, 8 , 30, 12, 00, 00),
-				//	Module = modules[0],
-					ActivityType = activityTypes[0]
+					Name = ".NET-utbildning Hösten 2017",
+					Description = "MVC.NET kurs",
+					StartDate = new DateTime(2017, 08, 28),
+					EndDate = new DateTime(2017, 12, 15),
 				},
-				new Activity
+				new Course
 				{
-					Name = "C# Intro 2",
-					Description = "Introduktion till C#",
-					StartDate = new DateTime(2017, 8 , 30, 13, 00, 00),
-					EndDate =  new DateTime(2017, 8 , 30, 17, 00, 00),
-				//	Module = modules[0],
-					ActivityType = activityTypes[0]
-				},
-				new Activity
-				{
-					Name = "C# Intro 3",
-					Description = "E-learning kapitel 1.1, 1.2",
-					StartDate = new DateTime(2017, 9 , 4,  13, 00, 00),
-					EndDate =  new DateTime(2017, 9 , 4, 17, 00, 00),
-				//	Module = modules[0],
-					ActivityType = activityTypes[0]
-				},
-				new Activity
-				{
-					Name = "C# Intro 4",
-					Description = "E-Learning kapitel 1.3",
-					StartDate = new DateTime(2017, 9 , 6,  8, 30, 00),
-					EndDate =  new DateTime(2017, 9 , 6, 12, 00, 00),
-				//	Module = modules[0],
-					ActivityType = activityTypes[0]
-				},
-				new Activity
-				{
-					Name = "C# Intro 5",
-					Description = "E-Learning kapitel 1.4, 1.5",
-					StartDate = new DateTime(2017, 9 , 12,  13, 00, 00),
-					EndDate =  new DateTime(2017, 9 , 12, 17, 00, 00),
-				//	Module = modules[0],
-					ActivityType = activityTypes[0]
-				},
-				new Activity
-				{
-					Name = "Övning 2-1",
-					Description = "Bygg ett garage för fordon",
-					StartDate = new DateTime(2017, 9 , 15, 8, 30, 00),
-					EndDate =  new DateTime(2017, 9 , 15, 12, 00, 00),
-				//	Module = modules[1],
-					ActivityType = activityTypes[2]
-				},
-				new Activity
-				{
-					Name = "Övning 2-2",
-					Description = "Bygg ett garage för fordon",
-					StartDate = new DateTime(2017, 9 , 24, 13, 00, 00),
-					EndDate =  new DateTime(2017, 9 , 24, 17, 00, 00),
-				//	Module = modules[1],
-					ActivityType = activityTypes[2]
-				},
-				new Activity
-				{
-					Name = "C# Grund 1",
-					Description = "Klasser och arv",
-					StartDate = new DateTime(2017, 10 , 1, 8, 30, 00),
-					EndDate =  new DateTime(2017, 10 , 1, 12, 00, 00),
-				//	Module = modules[1],
-					ActivityType = activityTypes[1]
-				},
-				new Activity
-				{
-					Name = "C# Grund 2",
-					Description = "Klasser och arv",
-					StartDate = new DateTime(2017, 10, 11, 13, 00, 00),
-					EndDate =  new DateTime(2017, 10, 11, 17, 00, 00),
-				//	Module = modules[2],
-					ActivityType = activityTypes[1]
-				},
-				new Activity
-				{
-					Name = "Java introduktion 1",
-					Description = "Nybörjarlektion",
-					StartDate = new DateTime(2017, 5, 3, 13, 00, 00),
-					EndDate =  new DateTime(2017, 5, 3, 17, 00, 00),
-				//	Module = modules[3],
-					ActivityType = activityTypes[1]
-				},
-				new Activity
-				{
-					Name = "Java introduktion 2",
-					Description = "Nybörjarlektion fortsättning",
-					StartDate = new DateTime(2017, 5, 10, 13, 00, 00),
-					EndDate =  new DateTime(2017, 5, 10, 17, 00, 00),
-				//	Module = modules[3],
-					ActivityType = activityTypes[1]
-				},
-				new Activity
-				{
-					Name = "Övning 1-1",
-					Description = "Garage övning",
-					StartDate = new DateTime(2017, 8, 3, 13, 00, 00),
-					EndDate =  new DateTime(2017, 8, 3, 17, 00, 00),
-				//	Module = modules[4],
-					ActivityType = activityTypes[2]
-				},
-				new Activity
-				{
-					Name = "Övning 1-2",
-					Description = "Garage övning",
-					StartDate = new DateTime(2017, 8, 10, 13, 00, 00),
-					EndDate =  new DateTime(2017, 8, 10, 17, 00, 00),
-				//	Module = modules[4],
-					ActivityType = activityTypes[2]
+					Name = "Java för Pingviner 2017",
+					Description = "Grundläggande java utbildning för ungfåglar",
+					StartDate = new DateTime(2017, 05, 01),
+					EndDate = new DateTime(2017, 12, 20),
 				},
 			};
 
@@ -191,8 +80,7 @@ namespace LMS.Migrations
 					Description = "Introduktion till C#",
 					StartDate = new DateTime(2017, 8 , 30, 00, 00, 00),
 					EndDate =  new DateTime(2017, 9 , 14, 00, 00, 00),
-					Activities = new[] { activities[0], activities[1], activities[2], activities[3], activities[4] }
-				//	Course = courses[0]
+					CourseId = 1,
 				},
 				new Module
 				{
@@ -200,8 +88,7 @@ namespace LMS.Migrations
 					Description = "Bygg ett garage för fordon",
 					StartDate = new DateTime(2017, 9 , 15, 00, 00, 00),
 					EndDate =  new DateTime(2017, 9 , 29, 00, 00, 00),
-					Activities = new[] { activities[5], activities[6] }
-				//	Course = courses[0]
+					CourseId = 1,
 				},
 				new Module
 				{
@@ -209,8 +96,7 @@ namespace LMS.Migrations
 					Description = "Klasser och arv",
 					StartDate = new DateTime(2017, 10 , 1, 00, 00, 00),
 					EndDate =  new DateTime(2017, 10 , 14, 00, 00, 00),
-					Activities = new[] { activities[7], activities[8] }
-				//	Course = courses[0]
+					CourseId = 1,
 				},
 				new Module
 				{
@@ -218,8 +104,7 @@ namespace LMS.Migrations
 					Description = "Nybörjarlektion",
 					StartDate = new DateTime(2017, 5, 3, 00, 00, 00),
 					EndDate =  new DateTime(2017, 5, 17, 00, 00, 00),
-					Activities = new[] { activities[9], activities[10] }
-				//	Course = courses[1]
+					CourseId = 2,
 				},
 				new Module
 				{
@@ -227,28 +112,128 @@ namespace LMS.Migrations
 					Description = "Garage övning",
 					StartDate = new DateTime(2017, 8 , 1, 00, 00, 00),
 					EndDate =  new DateTime(2017, 8 , 17, 00, 00, 00),
-					Activities = new[] { activities[11], activities[12] }
-				//	Course = courses[1]
+					CourseId = 2,
 				},
 			};
 
-			var courses = new[]
+			var activities = new[]
 			{
-				new Course
+				new Activity
 				{
-					Name = ".NET-utbildning Hösten 2017",
-					Description = "MVC.NET kurs",
-					StartDate = new DateTime(2017, 08, 28),
-					EndDate = new DateTime(2017, 12, 15),
-					Modules = new[] { modules[0], modules[1], modules[2] }					
+					Name = "C# Intro 1",
+					Description = "Introduktion till C#",
+					StartDate = new DateTime(2017, 8 , 30, 8, 30, 00),
+					EndDate =  new DateTime(2017, 8 , 30, 12, 00, 00),
+					ModuleId = 1,
+					ActivityTypeId = 1,
 				},
-				new Course
+				new Activity
 				{
-					Name = "Java för Pingviner 2017",
-					Description = "Grundläggande java utbildning för ungfåglar",
-					StartDate = new DateTime(2017, 05, 01),
-					EndDate = new DateTime(2017, 12, 20),
-					Modules = new[] { modules[3], modules[4] }
+					Name = "C# Intro 2",
+					Description = "Introduktion till C#",
+					StartDate = new DateTime(2017, 8 , 30, 13, 00, 00),
+					EndDate =  new DateTime(2017, 8 , 30, 17, 00, 00),
+					ModuleId = 1,
+					ActivityTypeId = 1,
+				},
+				new Activity
+				{
+					Name = "C# Intro 3",
+					Description = "E-learning kapitel 1.1, 1.2",
+					StartDate = new DateTime(2017, 9 , 4,  13, 00, 00),
+					EndDate =  new DateTime(2017, 9 , 4, 17, 00, 00),
+					ModuleId = 1,
+					ActivityTypeId = 1,
+				},
+				new Activity
+				{
+					Name = "C# Intro 4",
+					Description = "E-Learning kapitel 1.3",
+					StartDate = new DateTime(2017, 9 , 6,  8, 30, 00),
+					EndDate =  new DateTime(2017, 9 , 6, 12, 00, 00),
+					ModuleId = 1,
+					ActivityTypeId = 1,
+				},
+				new Activity
+				{
+					Name = "C# Intro 5",
+					Description = "E-Learning kapitel 1.4, 1.5",
+					StartDate = new DateTime(2017, 9 , 12,  13, 00, 00),
+					EndDate =  new DateTime(2017, 9 , 12, 17, 00, 00),
+					ModuleId = 1,
+					ActivityTypeId = 1,
+				},
+				new Activity
+				{
+					Name = "Övning 2-1",
+					Description = "Bygg ett garage för fordon",
+					StartDate = new DateTime(2017, 9 , 15, 8, 30, 00),
+					EndDate =  new DateTime(2017, 9 , 15, 12, 00, 00),
+					ModuleId = 2,
+					ActivityTypeId = 3,
+				},
+				new Activity
+				{
+					Name = "Övning 2-2",
+					Description = "Bygg ett garage för fordon",
+					StartDate = new DateTime(2017, 9 , 24, 13, 00, 00),
+					EndDate =  new DateTime(2017, 9 , 24, 17, 00, 00),
+					ModuleId = 2,
+					ActivityTypeId = 3,
+				},
+				new Activity
+				{
+					Name = "C# Grund 1",
+					Description = "Klasser och arv",
+					StartDate = new DateTime(2017, 10 , 1, 8, 30, 00),
+					EndDate =  new DateTime(2017, 10 , 1, 12, 00, 00),
+					ModuleId = 2,
+					ActivityTypeId = 2,
+				},
+				new Activity
+				{
+					Name = "C# Grund 2",
+					Description = "Klasser och arv",
+					StartDate = new DateTime(2017, 10, 11, 13, 00, 00),
+					EndDate =  new DateTime(2017, 10, 11, 17, 00, 00),
+					ModuleId = 3,
+					ActivityTypeId = 2,
+				},
+				new Activity
+				{
+					Name = "Java introduktion 1",
+					Description = "Nybörjarlektion",
+					StartDate = new DateTime(2017, 5, 3, 13, 00, 00),
+					EndDate =  new DateTime(2017, 5, 3, 17, 00, 00),
+					ModuleId = 4,
+					ActivityTypeId = 2,
+				},
+				new Activity
+				{
+					Name = "Java introduktion 2",
+					Description = "Nybörjarlektion fortsättning",
+					StartDate = new DateTime(2017, 5, 10, 13, 00, 00),
+					EndDate =  new DateTime(2017, 5, 10, 17, 00, 00),
+					ModuleId = 4,
+					ActivityTypeId = 2,
+				},
+				new Activity
+				{
+					Name = "Övning 1-1",
+					Description = "Garage övning",
+					StartDate = new DateTime(2017, 8, 3, 13, 00, 00),
+					EndDate =  new DateTime(2017, 8, 3, 17, 00, 00),
+					ModuleId = 5,
+					ActivityTypeId = 3,
+				},
+				new Activity
+				{
+					Name = "Övning 1-2",
+					Description = "Garage övning",
+					StartDate = new DateTime(2017, 8, 10, 13, 00, 00),
+					EndDate =  new DateTime(2017, 8, 10, 17, 00, 00),
+					ModuleId = 5,
+					ActivityTypeId = 3,
 				},
 			};
 

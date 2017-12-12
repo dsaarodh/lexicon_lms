@@ -9,8 +9,6 @@ namespace LMS
     {
         public void Configuration(IAppBuilder app)
         {
-			new ApplicationDbContext().Database.CreateIfNotExists();
-
             ConfigureAuth(app);
         }
     }

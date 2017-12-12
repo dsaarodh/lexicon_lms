@@ -17,7 +17,6 @@
 @{
 }
 
-
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#schema">Veckoschema (@Model.Calendar.GetWeekOfYear(DateTime.Now, System.Globalization.CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday))</a></li>
     <li><a data-toggle="tab" href="#modules">Moduler</a></li>
@@ -29,11 +28,6 @@
         <div id="left" class="col-md-6" style="padding: 0">
             @Html.Partial("_Schedule", Model)
         </div>
-
-        <div id="right" class="col-md-6">
-            Massa content
-        </div>
-
     </div>
     <div id="modules" class="tab-pane fade">
 		<div class="col-md-6">
@@ -43,14 +37,64 @@
     <div id="info" class="tab-pane fade">
         <p>Some content in menu 2.</p>
     </div>
+
+	<div id="right" class="col-md-6" />
 </div>
 
-@section Scripts
-{
-	<script>
-		$(function ()
-        {
-            $("#modulesList").treeview(@Html.Raw(@Model.TreeView.JsonObject))
-		})
-	</script>
+<script>
+
+	var OnModifyModelsSuccess = function (result)
+		{
+			if (result.TreeViewData)
+			{
+				// cache expanded nodes
+				var expandedNodesIdentifiers = [];
+				$("#modulesList").treeview('getNodes').forEach(function (n) { if (n.state.expanded) { expandedNodesIdentifiers.push(n.customData.action); } });
+				// update tree data
+				SetTreeView(result.TreeViewData);
+				// re-expand cached nodes
+				$("#modulesList").treeview('getNodes').forEach(function (n)
+					{
+						if (expandedNodesIdentifiers.find(function (e) { return n.customData.action === e; }))
+							$('#modulesList').treeview('expandNode', [ n.nodeId, { levels: 1, silent: true } ]);
+					});
+
+				// find the newly created node in the treeview
+				var node = $("#modulesList").treeview('getNodes').find(function (e)
+					{
+						return	(e.customData.type && (e.customData.type === result.Type)) &&
+								(e.customData.id && (e.customData.id ===  result.TypeId));
+					});
+				// reveal and select it, triggering onNodeSelected
+				if (node)
+				{
+					$("#modulesList").treeview('revealNode', [node.nodeId, { silent: true }]);
+					$("#modulesList").treeview('selectNode', [ node.nodeId, { silent: false } ]);
+				}
+				else
+					$("#right").html(null);
+			}
+			else
+				$("#right").html(result);
+		}
+
+	var SetTreeView = function (data)
+		{
+			$("#modulesList").treeview(
+				{
+					enableLinks: true,
+					data: data,
+					onNodeSelected: function (event, data) { $("#right").load(data.customData.action); }
+				});
+		}
+
+	window.addEventListener('load', function ()
+		{
+			SetTreeView(@Html.Raw(@Model.TreeView.JsonData));
+		}, true);
+
+</script>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
 }
