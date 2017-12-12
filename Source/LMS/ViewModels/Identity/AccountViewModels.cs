@@ -96,7 +96,7 @@ namespace LMS.ViewModels.Identity
         public string ConfirmPassword { get; set; }
 
         [Display(Name = "Role")]
-        public int Role { get; set; }
+        public string RoleId { get; set; }
 
     }
 

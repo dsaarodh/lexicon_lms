@@ -144,7 +144,11 @@ namespace LMS.Controllers
         [Authorize(Roles = Role.Teacher)]
         public ActionResult Register()
         {
-            //ViewBag.RoleList = new SelectList(db, nameof(), nameof(ActivityType.Name));
+            var roleStore = new RoleStore<IdentityRole>(db);
+            var roleManager = new RoleManager<IdentityRole>(roleStore);
+            var roles = roleManager.Roles.ToList();
+            ViewBag.RoleList = new SelectList(roles, "Id", "Name");
+
             return View();
         }
 
@@ -170,11 +174,11 @@ namespace LMS.Controllers
                 {
                     var roleStore = new RoleStore<IdentityRole>(db);
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
-                    var roles = roleManager.Roles.Where(n => n.Id == model.Role)
+                    var role = roleManager.Roles.Where(n => n.Id == model.RoleId).FirstOrDefault();
 
                     var userStore = new UserStore<ApplicationUser>(db);
                     var userManager = new UserManager<ApplicationUser>(userStore);
-                    userManager.AddToRole(user.Id, Role.Student);
+                    userManager.AddToRole(user.Id, role.Name);
 
 
                     //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
