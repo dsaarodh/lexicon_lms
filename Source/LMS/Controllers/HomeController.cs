@@ -597,8 +597,9 @@ namespace LMS.Controllers
 									{ 
 										mNode.Nodes.Add(new TreeViewNode
 											{
-												Text = "ADD ACTIVITY",
+												Text = " Add Node",
 												ClassList = new[] { "node-create" },
+												Icon = "glyphicon glyphicon-log-in",
 												CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
 											});
 									}
@@ -610,8 +611,9 @@ namespace LMS.Controllers
 						{ 
 							cNode.Nodes.Add(new TreeViewNode
 								{
-									Text = "ADD MODULE",
+									Text = " Add Module",
 									ClassList = new[] { "node-create" },
+									Icon = "glyphicon glyphicon-log-in",
 									CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
 								});
 						}
@@ -623,8 +625,9 @@ namespace LMS.Controllers
 			{ 
 				treeData.Add(new TreeViewNode
 					{
-						Text = "ADD COURSE",
+						Text = " Add Course",
 						ClassList = new[] { "node-create" },
+						Icon = "glyphicon glyphicon-log-in",
 						CustomData = new { Type = nameof(Course), Action = Url.Action(nameof(CreateCourse)) }
 					});
 			}

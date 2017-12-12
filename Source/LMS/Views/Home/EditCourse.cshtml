@@ -59,6 +59,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
+				@Ajax.ActionLink("Cancel", nameof(LMS.Controllers.HomeController.CourseInfo), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
@@ -73,11 +74,3 @@
 			});
     });
 </script>
-
-
-@*CustomData = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
-onNodeSelected: function (event, data) { $("#right").load(data.customData); }*@
-
-@*<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>*@

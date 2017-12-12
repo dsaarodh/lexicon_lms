@@ -45,6 +45,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" />
+			@Ajax.ActionLink("Cancel", nameof(LMS.Controllers.HomeController.CourseInfo), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
         </div>
     }
 </div>

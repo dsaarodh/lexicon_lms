@@ -126,8 +126,10 @@ textarea {
 #spacer {
     width: 100%;
 }
+
 /**************************** TREE VIEW *************************************/
 
 .treeview .node-create {
-	color: red;
+	/*color: red;*/
+	font-weight: bold;
 }
