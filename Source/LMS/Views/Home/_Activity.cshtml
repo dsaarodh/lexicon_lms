@@ -38,7 +38,10 @@
 
     </dl>
 </div>
-<p>
-    @Ajax.ActionLink("Edit", nameof(LMS.Controllers.HomeController.EditActivity), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
-	@Ajax.ActionLink("Delete", nameof(LMS.Controllers.HomeController.DeleteActivity), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
-</p>
+@if (User.IsInRole(LMS.Controllers.Role.Teacher))
+{
+	<p>
+		@Ajax.ActionLink("Edit", nameof(LMS.Controllers.HomeController.EditActivity), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
+		@Ajax.ActionLink("Delete", nameof(LMS.Controllers.HomeController.DeleteActivity), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" })
+	</p>
+}
