@@ -1,34 +1,75 @@
 ﻿@model LMS.ViewModels.ScheduleViewModels
-@using System.Globalization;
+@using System.Globalization
+@using System.Drawing;
 
-<table class="schemaTbl">
+
+@*<div id="spacer">-</div>*@
+<table class="schemaTbl" id="tbl">
     <tr>
-        <th>
-            Dag
-        </th>
-        <th>
-            Ämne
-        </th>
+        <td colspan="3">@Model.Course.Name</td>
     </tr>
     <tr>
-        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(0).DayOfWeek) @Model.FirstDayOfWeek.ToShortDateString()</td>
-        <td>C# Grund</td>
+        <th class="svg-cell">Dag</th>
+        <td style="padding: 0; margin: 0;" class="svg-cell" id="svg-container">
+            <div id="hourLineContainer" style="position: absolute;">
+                <svg id="hourLine">
+                    Sorry, your browser does not support inline SVG.
+                </svg>
+            </div>
+            <div id="container">
+                <svg class="lines" id="timeLine" style=""></svg>
+            </div>
+        </td>
     </tr>
-    <tr>
-        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(1).DayOfWeek) @Model.FirstDayOfWeek.AddDays(1).ToShortDateString()</td>
-        <td>HTML5</td>
-    </tr>
-    <tr>
-        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(2).DayOfWeek) @Model.FirstDayOfWeek.AddDays(2).ToShortDateString()</td>
-        <td>@Ajax.ActionLink("HTML5", "Activity", new AjaxOptions { UpdateTargetId = "right" })</td>
-    </tr>
-    <tr>
-        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(3).DayOfWeek) @Model.FirstDayOfWeek.AddDays(3).ToShortDateString()</td>
-        <td>@Ajax.ActionLink("CSS Grund", "Module", new AjaxOptions { UpdateTargetId = "right" })</td>
-    </tr>
-    <tr>
-        <td>@DateTimeFormatInfo.CurrentInfo.GetDayName(DateTime.Now.AddDays(4).DayOfWeek) @Model.FirstDayOfWeek.AddDays(4).ToShortDateString()</td>
-        <td>@Ajax.ActionLink("CSS Övning", "Course", "Home", new AjaxOptions() { UpdateTargetId = "right", InsertionMode = InsertionMode.Replace, HttpMethod = "GET" })</td>
-    </tr>
+
+    @for (var iDay = 0; iDay < 7; ++iDay)
+    {
+        var day = Model.WeekStartDate.AddDays(iDay);
+        <tr>
+            <td class="date">
+                @DateTimeFormatInfo.CurrentInfo.GetDayName(Model.FirstDayOfWeek.AddDays(iDay).DayOfWeek) @Model.FirstDayOfWeek.AddDays(iDay).ToShortDateString()
+            </td>
+            <td style="padding: 0; position:relative;">
+                @foreach (var a in Model.Activities)
+                {
+                    if (a.StartDate.Date <= @day.Date && a.EndDate.Date >= @day.Date && a.Module != null)
+                    {
+                        Color c = new Color();
+                        c = Color.FromArgb(33, 33, 33);
+                        Color color = a.Module.ColorCode != null ? System.Drawing.ColorTranslator.FromHtml(a.Module.ColorCode) : c;
+                        System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1, Math.Max(color.R - 30, 0), Math.Max(color.G - 30, 0), Math.Max(color.B - 30, 0));
+                        var x = String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
+                        <div class="module"
+                             data-start="@(a.StartDate.Hour + Math.Round(((double)a.StartDate.Minute * 100) / 60, 0) * 0.01)"
+                             data-end="@(a.EndDate.Hour + Math.Round(((double)a.EndDate.Minute * 100) / 60, 0) * 0.01)"
+                             style="background-color: @a.Module.ColorCode; border: 1px solid @x;">
+                            @*<div class="module" style="background-color: @a.Module.ColorCode; border: 1px solid @ColorShade(@a.Module.ColorCode);">*@
+                            @Ajax.ActionLink(a.Module.Name, "Module", new { moduleId = a.Module.Id }, new AjaxOptions { UpdateTargetId = "right" })
+                            <br>
+                            @Ajax.ActionLink(a.Name, "Activity", new { activityId = a.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "Activity" })
+                        </div>
+                    }
+
+                    if (a.EndDate.Hour == 12)
+                    {
+                        <div onclick="GetTimePosition('lunch', 'container')" class="lunch" data-start="12" data-end="13">
+                            <span class="glyphicon glyphicon-apple"></span>
+                        </div>
+                    }
+                }
+            </td>
+        </tr>
+    }
+    <tfoot>
+        <tr>
+            <td colspan="2">
+                @Ajax.ActionLink("<< Föregående vecka", "GetWeek", new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "prev" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default" })
+                @Ajax.ActionLink("Följande vecka >>", "GetWeek", new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "next" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
+            </td>
+        </tr>
+    </tfoot>
 </table>
+
+
+@Scripts.Render("~/Scripts/schedule.js")
 

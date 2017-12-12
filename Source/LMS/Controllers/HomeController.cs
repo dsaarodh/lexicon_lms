@@ -3,6 +3,8 @@ using LMS.Models.AppData;
 using LMS.ViewModels;
 using LMS.ViewModels.Widgets;
 using Microsoft.AspNet.Identity;
+using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Globalization;
 using System.Linq;
@@ -18,11 +20,10 @@ namespace LMS.Controllers
         [Authorize(Roles = "Teacher, Student")]
         public ActionResult Index()
         {
+
             var scheduleVM = new ScheduleViewModels();
             CultureInfo cultureInfo = new CultureInfo("sv-SE");
             scheduleVM.Calendar = cultureInfo.Calendar;
-
-
             var userId = User.Identity.GetUserId();
             var courseId = db.Users.Find(userId).CourseId;
 
@@ -32,11 +33,31 @@ namespace LMS.Controllers
                 scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
             }
 
-                
-            //scheduleVM.Course = new Course() { Name = "Test Course" };
-            
+            scheduleVM.Days = new List<Day>();
+            scheduleVM.Activities = db.Activities
+                    .Where(a => a.Module.Course.Users.Any(u => u.Id == userId) && a.StartDate <= scheduleVM.WeekEndDate && a.EndDate >= scheduleVM.WeekStartDate)
+                    .ToArray();
 
+            for (int i = 0; i < 7; i++)
+            {
+                Day day = new Day
+                {
+                    Date = scheduleVM.WeekStartDate.AddDays(i)
+                };
 
+                if (courseId != null)
+                {
+                    day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
+                }
+                if (day.Modules != null)
+                {
+                    for (int j = 0; j < day.Modules.Count; j++)
+                    {
+                        day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
+                    }
+                }
+                scheduleVM.Days.Add(day);
+            }
 
             if (!User.Identity.IsAuthenticated)
             {
@@ -93,9 +114,9 @@ namespace LMS.Controllers
 			return View();
 		}
 
-        public PartialViewResult Activity()
+        public PartialViewResult Activity(int activityId)
         {            
-            Activity activity = db.Activities.Where(a => a.Id == 1).FirstOrDefault();
+            Activity activity = db.Activities.Where(a => a.Id == activityId).FirstOrDefault();
 
             return PartialView("_Activity", activity);
         }
@@ -106,11 +127,82 @@ namespace LMS.Controllers
             return PartialView("_Course", course);
         }
 
-        public PartialViewResult Module()
+        public PartialViewResult Module(int moduleId)
         {
-            Module module = db.Modules.Where(m => m.Id == 1).FirstOrDefault();
+            Module module = db.Modules.Where(m => m.Id == moduleId).FirstOrDefault();
             module.ColorCode = "#070707";
             return PartialView("_Module", module);
+        }
+
+        public string ColorShade(string color)
+        {
+            var c = System.Drawing.ColorTranslator.FromHtml(color);
+            System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1,  Math.Min(c.R - 50, 255), Math.Min(c.G - 50, 255), Math.Min(c.B - 50, 255));
+            return String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
+        }
+
+        public PartialViewResult GetWeek(DateTime start, DateTime end, string move)
+        {
+            ScheduleViewModels scheduleVM = new ScheduleViewModels();
+            var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
+//            var newDate = cal.AddWeeks(DateTime.Now, scheduleVM.CurrentWeek);
+
+            if (move == "prev")
+            {
+       
+                scheduleVM.WeekStartDate = start.AddDays(-7);
+            }
+            else
+            {
+                scheduleVM.WeekStartDate = end.AddDays(7);
+            }
+
+            //var scheduleVM = new ScheduleViewModels();
+//            CultureInfo cultureInfo = new CultureInfo("sv-SE");
+            scheduleVM.Calendar = cal; //cultureInfo.Calendar;
+
+            var userId = User.Identity.GetUserId();
+            var courseId = db.Users.Find(userId).CourseId;
+
+            scheduleVM.Course = new Course();
+            if (!User.IsInRole(Role.Teacher))
+            {
+                scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
+            }
+
+            scheduleVM.Days = new List<Day>();
+            scheduleVM.Activities = db.Activities
+                    .Where(a => a.Module.Course.Users.Any(u => u.Id == userId) && a.StartDate <= scheduleVM.WeekEndDate && a.EndDate >= scheduleVM.WeekStartDate)
+                    .ToArray();
+
+            for (int i = 0; i < 7; i++)
+            {
+                Day day = new Day
+                {
+                    Date = scheduleVM.WeekStartDate.AddDays(i)
+                };
+
+                if (courseId != null)
+                {
+
+                    day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
+                }
+                if (day.Modules != null)
+                {
+                    for (int j = 0; j < day.Modules.Count; j++)
+                    {
+                        day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
+                    }
+                }
+                scheduleVM.Days.Add(day);
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return PartialView("_Schedule", scheduleVM);
+            }
+
+            return PartialView("_Schedule", scheduleVM);
         }
     }
 }
