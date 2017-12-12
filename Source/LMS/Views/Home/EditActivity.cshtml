@@ -1,9 +1,11 @@
-﻿@model LMS.Models.AppData.Activity
+﻿@using System.Globalization
+
+@model LMS.Models.AppData.Activity
 
 @using (Ajax.BeginForm(new AjaxOptions { OnSuccess = "OnModifyModelsSuccess" }))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Activity</h4>
         <hr />
@@ -37,7 +39,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.TextBoxFor(model => model.StartDate, htmlAttributes: new { @type = "datetime-local", @Value = Model.StartDate.ToString("yyyy-MM-ddThh:mm"), @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -45,7 +47,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.TextBoxFor(model => model.EndDate, htmlAttributes: new { @type = "datetime-local", @Value = Model.EndDate.ToString("yyyy-MM-ddThh:mm"), @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
