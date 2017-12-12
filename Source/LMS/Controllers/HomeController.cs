@@ -171,19 +171,14 @@ namespace LMS.Controllers
 			var course = db.Courses.SingleOrDefault(c => c.Id == id);
 			if (course != null)
 			{
-				if (User.IsInRole(Role.Teacher)) // TODO: Is this needed?
-				{
-					var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
-					var studentUsers = db.Users
-						.Where(u => u.Roles
-							.Select(r => r.RoleId)
-							.Contains(identityRole.Id));
+				var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
+				var studentUsers = db.Users
+					.Where(u => u.Roles
+						.Select(r => r.RoleId)
+						.Contains(identityRole.Id));
 
-					ViewBag.Users = studentUsers;
-					return PartialView(nameof(EditCourse), course);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				ViewBag.Users = studentUsers;
+				return PartialView(nameof(EditCourse), course);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -239,13 +234,8 @@ namespace LMS.Controllers
 			var module = db.Modules.Find(id);
 			if (module != null)
 			{
-				if (User.IsInRole(Role.Teacher))
-				{
-					ViewBag.CoursesList = new SelectList(db.Courses, nameof(Course.Id), nameof(Course.Name), module.CourseId);
-					return PartialView(nameof(EditModule), module);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				ViewBag.CoursesList = new SelectList(db.Courses, nameof(Course.Id), nameof(Course.Name), module.CourseId);
+				return PartialView(nameof(EditModule), module);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -283,14 +273,9 @@ namespace LMS.Controllers
 			var activity = db.Activities.Find(id);
 			if (activity != null)
 			{
-				if (User.IsInRole(Role.Teacher))
-				{
-					ViewBag.ModulesList = new SelectList(db.Modules, nameof(Module.Id), nameof(Module.Name), activity.ModuleId);
-					ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name), activity.ActivityTypeId);
-					return PartialView(nameof(EditActivity), activity);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				ViewBag.ModulesList = new SelectList(db.Modules, nameof(Module.Id), nameof(Module.Name), activity.ModuleId);
+				ViewBag.ActivityTypeList = new SelectList(db.ActivityTypes, nameof(ActivityType.Id), nameof(ActivityType.Name), activity.ActivityTypeId);
+				return PartialView(nameof(EditActivity), activity);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -334,14 +319,8 @@ namespace LMS.Controllers
 			var course = db.Courses.Find(id);
 			if (course != null)
 			{
-				if (User.IsInRole(Role.Teacher))
-				{
-					// TODO: Add popup verification instead of DeleteConfirmed?
-
-					return PartialView(nameof(DeleteCourse), course);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				// TODO: Add popup verification instead of DeleteConfirmed?
+				return PartialView(nameof(DeleteCourse), course);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -379,14 +358,8 @@ namespace LMS.Controllers
 			var module = db.Modules.Find(id);
 			if (module != null)
 			{
-				if (User.IsInRole(Role.Teacher))
-				{
-					// TODO: Add popup verification instead of DeleteConfirmed?
-
-					return PartialView(nameof(DeleteModule), module);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				// TODO: Add popup verification instead of DeleteConfirmed?
+				return PartialView(nameof(DeleteModule), module);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -424,14 +397,8 @@ namespace LMS.Controllers
 			var activity = db.Activities.Find(id);
 			if (activity != null)
 			{
-				if (User.IsInRole(Role.Teacher))
-				{
-					// TODO: Add popup verification instead of DeleteConfirmed?
-
-					return PartialView(nameof(DeleteActivity), activity);
-				}
-				else
-					return new HttpUnauthorizedResult();
+				// TODO: Add popup verification instead of DeleteConfirmed?
+				return PartialView(nameof(DeleteActivity), activity);
 			}
 			else
 				return new HttpNotFoundResult();
@@ -527,55 +494,67 @@ namespace LMS.Controllers
 				.Include(c => c.Modules.Select(m => m.Activities)).ToList();
 
 			var treeData = courses.Select(c =>
-			{
-				var cNode = new TreeViewNode
 				{
-					Text = c.Name,
-					CustomData = new { Type = nameof(Course), Id = c.Id, Action = Url.Action(nameof(CourseInfo), new { Id = c.Id }) }
-				};
-
-				cNode.Nodes = c.Modules.Select(m =>
-				{
-					var mNode = new TreeViewNode
-					{
-						Text = m.Name,
-						CustomData = new { Type = nameof(Module), Id = m.Id, Action = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) }
-					};
-
-					mNode.Nodes = m.Activities.Select(a =>
-					{
-						var aNode = new TreeViewNode
+					var cNode = new TreeViewNode
 						{
-							Text = a.Name,
-							CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
+							Text = c.Name,
+							CustomData = new { Type = nameof(Course), Id = c.Id, Action = Url.Action(nameof(CourseInfo), new { Id = c.Id }) }
 						};
 
-						return aNode;
-					}).ToList();
-					mNode.Nodes.Add(new TreeViewNode
-						{
-							Text = "ADD ACTIVITY",
-							ClassList = new[] { "node-create" },
-							CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
-						});
-
-					return mNode;
-				}).ToList();
-				cNode.Nodes.Add(new TreeViewNode
+					cNode.Nodes = c.Modules.Select(m =>
 					{
-						Text = "ADD MODULE",
-						ClassList = new[] { "node-create" },
-						CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
-					});
+						var mNode = new TreeViewNode
+							{
+								Text = m.Name,
+								CustomData = new { Type = nameof(Module), Id = m.Id, Action = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) }
+							};
 
-				return cNode;
-			}).ToList();
-			treeData.Add(new TreeViewNode
-				{
-					Text = "ADD COURSE",
-					ClassList = new[] { "node-create" },
-					CustomData = new { Type = nameof(Course), Action = Url.Action(nameof(CreateCourse)) }
-				});
+						mNode.Nodes = m.Activities.Select(a =>
+							{
+								var aNode = new TreeViewNode
+								{
+									Text = a.Name,
+									CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
+								};
+
+								return aNode;
+							}).ToList();
+
+						if (isTeacher)
+						{ 
+							mNode.Nodes.Add(new TreeViewNode
+								{
+									Text = "ADD ACTIVITY",
+									ClassList = new[] { "node-create" },
+									CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
+								});
+						}
+
+						return mNode;
+					}).ToList();
+
+					if (isTeacher)
+					{ 
+						cNode.Nodes.Add(new TreeViewNode
+							{
+								Text = "ADD MODULE",
+								ClassList = new[] { "node-create" },
+								CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
+							});
+					}
+
+					return cNode;
+				}).ToList();
+
+			if (isTeacher)
+			{ 
+				treeData.Add(new TreeViewNode
+					{
+						Text = "ADD COURSE",
+						ClassList = new[] { "node-create" },
+						CustomData = new { Type = nameof(Course), Action = Url.Action(nameof(CreateCourse)) }
+					});
+			}
 
 			return new TreeViewModel() { Data = treeData };
 		}
