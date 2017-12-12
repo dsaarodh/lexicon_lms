@@ -317,6 +317,7 @@
     <Content Include="Views\Home\DeleteModule.cshtml" />
     <Content Include="Views\Home\DeleteActivity.cshtml" />
     <Content Include="Views\Home\UserManager.cshtml" />
+    <Content Include="Views\Account\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
