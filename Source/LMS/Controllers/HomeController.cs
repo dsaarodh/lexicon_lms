@@ -1,9 +1,14 @@
 ﻿using LMS.DataAccess;
 using LMS.Models.AppData;
+using LMS.Models.AppData.Base;
 using LMS.ViewModels;
 using LMS.ViewModels.Widgets;
 using Microsoft.AspNet.Identity;
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -138,6 +143,8 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult CreateActivity(int moduleId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
 		{
+			ValidateTimeInterval(activity);
+
 			var module = db.Modules.Find(moduleId);
 			if (ModelState.IsValid && module != null)
 			{
@@ -286,6 +293,8 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult EditActivity([Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
 		{
+			ValidateTimeInterval(activity);
+
 			if (ModelState.IsValid)
 			{
 				db.Entry(activity).State = EntityState.Modified;
@@ -493,58 +502,67 @@ namespace LMS.Controllers
 				.Where(co => isTeacher ? true : co.Id == courseId)
 				.Include(c => c.Modules.Select(m => m.Activities)).ToList();
 
-			var treeData = courses.Select(c =>
-				{
-					var cNode = new TreeViewNode
-						{
-							Text = c.Name,
-							CustomData = new { Type = nameof(Course), Id = c.Id, Action = Url.Action(nameof(CourseInfo), new { Id = c.Id }) }
-						};
-
-					cNode.Nodes = c.Modules.Select(m =>
+			var treeData = courses
+				.OrderBy(c => c.Name)
+				.Select(c =>
 					{
-						var mNode = new TreeViewNode
+						var cNode = new TreeViewNode
 							{
-								Text = m.Name,
-								CustomData = new { Type = nameof(Module), Id = m.Id, Action = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) }
+								Text = c.Name,
+								CustomData = new { Type = nameof(Course), Id = c.Id, Action = Url.Action(nameof(CourseInfo), new { Id = c.Id }) }
 							};
 
-						mNode.Nodes = m.Activities.Select(a =>
-							{
-								var aNode = new TreeViewNode
+						cNode.Nodes = c.Modules
+							.OrderBy(m => m.Name)
+							.Select(m =>
 								{
-									Text = a.Name,
-									CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
-								};
+									var mNode = new TreeViewNode
+										{
+											Text = m.Name,
+											CustomData = new { Type = nameof(Module), Id = m.Id, Action = Url.Action(nameof(ModuleInfo), new { Id = m.Id }) }
+										};
 
-								return aNode;
-							}).ToList();
+
+									mNode.Nodes = m.Activities
+										.OrderBy(a => a.StartDate)
+										.ThenBy(a => a.EndDate)
+										.ThenBy(a => a.Name)
+										.Select(a =>
+											{
+												var aNode = new TreeViewNode
+												{
+													Text = a.Name,
+													CustomData = new { Type = nameof(Activity), Id = a.Id, Action = Url.Action(nameof(ActivityInfo), new { Id = a.Id }) }
+												};
+
+												return aNode;
+											}).ToList();
+
+									if (isTeacher)
+									{ 
+										mNode.Nodes.Add(new TreeViewNode
+											{
+												Text = "ADD ACTIVITY",
+												ClassList = new[] { "node-create" },
+												CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
+											});
+									}
+
+									return mNode;
+								}).ToList();
 
 						if (isTeacher)
 						{ 
-							mNode.Nodes.Add(new TreeViewNode
+							cNode.Nodes.Add(new TreeViewNode
 								{
-									Text = "ADD ACTIVITY",
+									Text = "ADD MODULE",
 									ClassList = new[] { "node-create" },
-									CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
+									CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
 								});
 						}
 
-						return mNode;
+						return cNode;
 					}).ToList();
-
-					if (isTeacher)
-					{ 
-						cNode.Nodes.Add(new TreeViewNode
-							{
-								Text = "ADD MODULE",
-								ClassList = new[] { "node-create" },
-								CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
-							});
-					}
-
-					return cNode;
-				}).ToList();
 
 			if (isTeacher)
 			{ 
@@ -559,5 +577,40 @@ namespace LMS.Controllers
 			return new TreeViewModel() { Data = treeData };
 		}
 
+		private void ValidateTimeInterval(Course model)
+		{
+			// check if activity time interval overlap any other activity from the same module
+			var set = db.Set<Course>().AsNoTracking();
+			var overlaps = set.Where(m => m.Id != model.Id && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
+			if (overlaps.Count() > 0)
+			{
+				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+			}
+		}
+
+		private void ValidateTimeInterval(Module model)
+		{
+			// check if activity time interval overlap any other activity from the same module
+			var set = db.Set<Module>().AsNoTracking();
+			var overlaps = set.Where(m => m.Id != model.Id && m.CourseId == model.CourseId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
+			if (overlaps.Count() > 0)
+			{
+				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+			}
+		}
+
+		private void ValidateTimeInterval(Activity model)
+		{
+			// check if activity time interval overlap any other activity from the same module
+			var set = db.Set<Activity>().AsNoTracking();
+			var overlaps = set.Where(m => m.Id != model.Id && m.ModuleId == model.ModuleId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
+			if (overlaps.Count() > 0)
+			{
+				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+			}
+		}
 	}
 }
