@@ -42,6 +42,20 @@
             </div>
         </div>
 
+		<div class="form-group">
+			@Html.LabelFor(model => model.Users, htmlAttributes: new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				<select id="UsersIds" name="UserIds" class="form-control" multiple="multiple">
+					@foreach (var user in ViewBag.Users)
+					{
+						var selected = user.CourseId == Model.Id ? "selected='selected'" : "";
+						<option type="checkbox" @selected value="@user.Id">@user.FullName</option>
+					}
+				</select>
+				@Html.ValidationMessageFor(model => model.Users, "", new { @class = "text-danger" })
+			</div>
+		</div>
+
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -49,6 +63,16 @@
         </div>
     </div>
 }
+
+<script type="text/javascript">
+	$(document).ready(function ()
+	{
+		$('#userList').multiselect(
+			{
+				enableFiltering: true
+			});
+    });
+</script>
 
 
 @*CustomData = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }

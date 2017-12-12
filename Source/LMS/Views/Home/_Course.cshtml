@@ -36,6 +36,18 @@
             @Html.DisplayFor(model => model.EndDate)
         </dd>
 
+		<dt>
+			@Html.DisplayNameFor(model => model.Users)
+		</dt>
+		<dd>
+			<ul style="padding-left: 20px; overflow: auto;">
+				@foreach (var u in Model.Users)
+				{
+					<li>@Html.DisplayFor(model => u.FullName)</li>
+				}	
+			</ul>
+		</dd>
+
     </dl>
 </div>
 <p>
