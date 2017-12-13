@@ -49,9 +49,9 @@ namespace LMS.Migrations
 			var activityTypes = new[]
 			{
 				new ActivityType { Name = "E-learning" },
-				new ActivityType { Name = "Lecture" },
-				new ActivityType { Name = "Workshop" },
-				new ActivityType { Name = "Assignment" }
+				new ActivityType { Name = "Föreläsning" },
+				new ActivityType { Name = "Övning" },
+				new ActivityType { Name = "Inlämningsuppgift" }
 			};
 
 			var courses = new[]

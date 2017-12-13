@@ -23,7 +23,7 @@ namespace LMS.Controllers
 	{
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        [Authorize(Roles = "Teacher, Student")]
+        [Authorize(Roles = Role.Teacher + "," + Role.Student)]
         public ActionResult Index()
         {
 
@@ -597,7 +597,7 @@ namespace LMS.Controllers
 									{ 
 										mNode.Nodes.Add(new TreeViewNode
 											{
-												Text = " Add Activity",
+												Text = " Lägg till aktivitet",
 												ClassList = new[] { "node-create" },
 												Icon = "glyphicon glyphicon-log-in",
 												CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
@@ -611,7 +611,7 @@ namespace LMS.Controllers
 						{ 
 							cNode.Nodes.Add(new TreeViewNode
 								{
-									Text = " Add Module",
+									Text = " Lägg till modul",
 									ClassList = new[] { "node-create" },
 									Icon = "glyphicon glyphicon-log-in",
 									CustomData = new { Type = nameof(Module), Action = Url.Action(nameof(CreateModule), new { courseId = c.Id }) }
@@ -625,7 +625,7 @@ namespace LMS.Controllers
 			{ 
 				treeData.Add(new TreeViewNode
 					{
-						Text = " Add Course",
+						Text = " Lägg till kurs",
 						ClassList = new[] { "node-create" },
 						Icon = "glyphicon glyphicon-log-in",
 						CustomData = new { Type = nameof(Course), Action = Url.Action(nameof(CreateCourse)) }
@@ -642,8 +642,8 @@ namespace LMS.Controllers
 			var overlaps = set.Where(m => m.Id != model.Id && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
         {            
-				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
-				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan kurs.");
+				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan kurs.");
 			}
         }
 
@@ -654,8 +654,8 @@ namespace LMS.Controllers
 			var overlaps = set.Where(m => m.Id != model.Id && m.CourseId == model.CourseId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
         {
-				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
-				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan modul.");
+				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan modul.");
 			}
         }
 
@@ -666,8 +666,8 @@ namespace LMS.Controllers
 			var overlaps = set.Where(m => m.Id != model.Id && m.ModuleId == model.ModuleId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
         {
-				ModelState.AddModelError("StartDate", "Time interval overlaps another entity on the same level.");
-				ModelState.AddModelError("EndDate", "Time interval overlaps another entity on the same level.");
+				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan aktivitet.");
+				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan aktivitet.");
 			}
         }
 

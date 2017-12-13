@@ -10,15 +10,20 @@ namespace LMS.Models.AppData.Base
 	{
 		public int Id { get; set; }
 
+        [Display(Name = "Namn")]
 		public string Name { get; set; }
-		public string Description { get; set; }
+
+        [Display(Name = "Beskrivning")]
+        public string Description { get; set; }
 
 		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd hh:mm}")]
 		[DataType(DataType.DateTime)]
-		public DateTime StartDate { get; set; }
+        [Display(Name = "Startdatum")]
+        public DateTime StartDate { get; set; }
 
 		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd hh:mm}")]
 		[DataType(DataType.DateTime)]
-		public DateTime EndDate { get; set; }
+        [Display(Name = "Slutdatum")]
+        public DateTime EndDate { get; set; }
 	}
 }

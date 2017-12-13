@@ -1,14 +1,17 @@
 ﻿using LMS.Models.AppData.Base;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LMS.Models.AppData
 {
 	public class Module : ActivityBase
     {
+        [Display(Name = "Färg")]
         public string ColorCode { get; set; }
 
-		public int CourseId { get; set; }
+        [Display(Name = "Kurs")]
+        public int CourseId { get; set; }
 
 		// navigational properties
 		[ForeignKey(nameof(CourseId))]

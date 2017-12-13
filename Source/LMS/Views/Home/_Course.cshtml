@@ -1,6 +1,6 @@
 ﻿@model LMS.Models.AppData.Course
 
-<h4>Course</h4>
+<h4>Kurs</h4>
 <hr />
 <dl class="dl-horizontal">
     <dt>
@@ -52,7 +52,7 @@
 @if (User.IsInRole(LMS.Controllers.Role.Teacher))
 {
 	<p>
-		@Ajax.ActionLink("Edit", nameof(LMS.Controllers.HomeController.EditCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
-		@Ajax.ActionLink("Delete", nameof(LMS.Controllers.HomeController.DeleteCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
+		@Ajax.ActionLink("Ändra", nameof(LMS.Controllers.HomeController.EditCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
+		@Ajax.ActionLink("Ta bort", nameof(LMS.Controllers.HomeController.DeleteCourse), new { id = Model.Id }, new AjaxOptions { UpdateTargetId = "right" }, new { @class = "btn btn-default" })
 	</p>
 }

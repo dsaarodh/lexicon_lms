@@ -10,19 +10,19 @@ namespace LMS.ViewModels
     {
         public string Id { get; set; }
 
-        [Display(Name ="Last name")]
+        [Display(Name ="Efternamn")]
         public string LastName { get; set; }
 
-        [Display(Name = "First name")]
+        [Display(Name = "Förnamn")]
         public string FirstName { get; set; }
 
-        [Display(Name = "E-mail")]
+        [Display(Name = "E-post")]
         public string Email { get; set; }
 
-        [Display(Name = "Course")]
+        [Display(Name = "Kurs")]
         public string Course { get; set; }
 
-        [Display(Name = "Role")]
+        [Display(Name = "Roll")]
         public string Role { get; set; }
     }
 }
