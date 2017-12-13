@@ -34,7 +34,7 @@ namespace LMS.Controllers
             scheduleVM.Course = new Course();
             if (!User.IsInRole(Role.Teacher))
             {
-               // scheduleVM.Course.Name = db.Courses.Where(co => courseId != null ? co.Id == courseId : false).Select(n => n.Name).FirstOrDefault().ToString();
+                scheduleVM.Course.Name = db.Courses.Where(co => courseId != null ? co.Id == courseId : false).Select(n => n.Name).FirstOrDefault().ToString();
             }
 
             scheduleVM.Days = new List<Day>();
@@ -307,7 +307,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult EditModule([Bind(Include = "Id,Name,Description,StartDate,EndDate,CourseId")] Module module)
+		public ActionResult EditModule([Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode,CourseId")] Module module)
 		{
 			if (ModelState.IsValid)
 			{
