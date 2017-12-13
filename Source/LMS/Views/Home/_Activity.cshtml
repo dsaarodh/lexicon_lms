@@ -35,6 +35,14 @@
         @Html.DisplayFor(model => model.EndDate)
     </dd>
 
+    <dt>
+        @Html.DisplayNameFor(model => model.ActivityType.Name)
+    </dt>
+
+    <dd>
+        @Html.DisplayFor(model => model.ActivityType.Name)
+    </dd>
+
 </dl>
 
 @if (User.IsInRole(LMS.Controllers.Role.Teacher))
