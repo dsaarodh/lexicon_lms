@@ -597,7 +597,7 @@ namespace LMS.Controllers
 									{ 
 										mNode.Nodes.Add(new TreeViewNode
 											{
-												Text = " Add Node",
+												Text = " Add Activity",
 												ClassList = new[] { "node-create" },
 												Icon = "glyphicon glyphicon-log-in",
 												CustomData = new { Type = nameof(Activity), Action = Url.Action(nameof(CreateActivity), new { moduleId = m.Id }) }
