@@ -168,6 +168,8 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult CreateModule(int courseId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode,CourseId")] Module module)
 		{
+			ValidateTimeInterval(module);
+
 			var course = db.Courses.Find(courseId);
 			if (ModelState.IsValid && course != null)
 			{
@@ -309,6 +311,8 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult EditModule([Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode,CourseId")] Module module)
 		{
+			ValidateTimeInterval(module);
+
 			if (ModelState.IsValid)
 			{
 				db.Entry(module).State = EntityState.Modified;
@@ -637,47 +641,58 @@ namespace LMS.Controllers
 
 		private void ValidateTimeInterval(Course model)
 		{
+			if (model.StartDate > model.EndDate)
+				ModelState.AddModelError(nameof(Course.StartDate), "Start datum måste vara mindre än slut datum.");
+
 			// check if activity time interval overlap any other activity from the same module
 			var set = db.Set<Course>().AsNoTracking();
 			var overlaps = set.Where(m => m.Id != model.Id && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
 			{            
-				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan kurs.");
-				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan kurs.");
+				ModelState.AddModelError(nameof(Module.StartDate), "Tidsintervallet överlappar med en annan kurs.");
+				ModelState.AddModelError(nameof(Module.EndDate), "Tidsintervallet överlappar med en annan kurs.");
 			}
         }
 
 		private void ValidateTimeInterval(Module model)
 		{
-			if (model.StartDate < model.Course.StartDate)
-				ModelState.AddModelError("Startdatum", "Angivet start datum är tidigare än kursens start datum.");
-			else if (model.EndDate > model.Course.EndDate)
-				ModelState.AddModelError("Startdatum", "Angivet start datum är senare än kursens slut datum.");
+			if (model.StartDate > model.EndDate)
+				ModelState.AddModelError(nameof(Module.StartDate), "Start datum måste vara mindre än slut datum.");
+
+			var parent = db.Courses.Find(model.CourseId);
+			if (model.StartDate < parent.StartDate)
+				ModelState.AddModelError(nameof(Module.StartDate), "Angivet start datum är tidigare än kursens start datum.");
+			if (model.EndDate > parent.EndDate)
+				ModelState.AddModelError(nameof(Module.EndDate), "Angivet slut datum är senare än kursens slut datum.");
 
 			// check if activity time interval overlap any other activity from the same module
 			var set = db.Set<Module>().AsNoTracking();
 			var overlaps = set.Where(m => m.Id != model.Id && m.CourseId == model.CourseId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
 			{
-				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan modul.");
-				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan modul.");
+				ModelState.AddModelError(nameof(Module.StartDate), "Tidsintervallet överlappar med en annan modul.");
+				ModelState.AddModelError(nameof(Module.EndDate), "Tidsintervallet överlappar med en annan modul.");
 			}
         }
 
 		private void ValidateTimeInterval(Activity model)
 		{
-			if (model.StartDate < model.Module.StartDate)
-				ModelState.AddModelError("Startdatum", "Angivet start datum är tidigare än modulens start datum.");
-			else if (model.EndDate > model.Module.EndDate)
-				ModelState.AddModelError("Startdatum", "Angivet start datum är senare än modulens slut datum.");
+			if (model.StartDate > model.EndDate)
+				ModelState.AddModelError(nameof(Module.StartDate), "Start datum måste vara mindre än slut datum.");
+
+			var parent = db.Modules.Find(model.ModuleId);
+			if (model.StartDate < parent.StartDate)
+				ModelState.AddModelError(nameof(Module.StartDate), "Angivet start datum är tidigare än modulens start datum.");
+			if (model.EndDate > parent.EndDate)
+				ModelState.AddModelError(nameof(Module.EndDate), "Angivet slut datum är senare än modulens slut datum.");
 
 			// check if activity time interval overlap any other activity from the same module
 			var set = db.Set<Activity>().AsNoTracking();
 			var overlaps = set.Where(m => m.Id != model.Id && m.ModuleId == model.ModuleId && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
 			if (overlaps.Count() > 0)
 			{
-				ModelState.AddModelError("Startdatum", "Tidsintervallet överlappar med en annan aktivitet.");
-				ModelState.AddModelError("Slutdatum", "Tidsintervallet överlappar med en annan aktivitet.");
+				ModelState.AddModelError(nameof(Module.StartDate), "Tidsintervallet överlappar med en annan aktivitet.");
+				ModelState.AddModelError(nameof(Module.EndDate), "Tidsintervallet överlappar med en annan aktivitet.");
 			}
         }
 
