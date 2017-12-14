@@ -107,7 +107,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult CreateCourse([Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		public ActionResult CreateCourse([Bind] Course course)
 		{
 			if (ModelState.IsValid)
 			{
@@ -136,7 +136,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult CreateModule(int courseId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode,CourseId")] Module module)
+		public ActionResult CreateModule(int courseId, [Bind] Module module)
 		{
 			ValidateTimeInterval(module);
 
@@ -169,7 +169,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult CreateActivity(int moduleId, [Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
+		public ActionResult CreateActivity(int moduleId, [Bind] Activity activity)
 		{
 			ValidateTimeInterval(activity);
 
@@ -222,7 +222,7 @@ namespace LMS.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult EditCourse(object[] userIds, [Bind(Include = "Id,Name,Description,StartDate,EndDate")] Course course)
+		public ActionResult EditCourse(object[] userIds, [Bind] Course course)
 		{
 			if (ModelState.IsValid)
 			{
@@ -279,7 +279,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult EditModule([Bind(Include = "Id,Name,Description,StartDate,EndDate,ColorCode,CourseId")] Module module)
+		public ActionResult EditModule([Bind] Module module)
 		{
 			ValidateTimeInterval(module);
 
@@ -321,7 +321,7 @@ namespace LMS.Controllers
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		[Authorize(Roles = Role.Teacher)]
-		public ActionResult EditActivity([Bind(Include = "Id,Name,Description,StartDate,EndDate,ActivityTypeId,ModuleId")] Activity activity)
+		public ActionResult EditActivity([Bind] Activity activity)
 		{
 			ValidateTimeInterval(activity);
 
