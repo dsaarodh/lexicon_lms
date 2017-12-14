@@ -109,6 +109,8 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult CreateCourse([Bind] Course course)
 		{
+			ValidateTimeInterval(course);
+
 			if (ModelState.IsValid)
 			{
 				db.Courses.Add(course);
@@ -224,15 +226,19 @@ namespace LMS.Controllers
 		[Authorize(Roles = Role.Teacher)]
 		public ActionResult EditCourse(object[] userIds, [Bind] Course course)
 		{
+			var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
+			var studentUsers = db.Users
+				.Where(u => u.Roles
+					.Select(r => r.RoleId)
+					.Contains(identityRole.Id))
+				.ToArray();				
+
+			ValidateTimeInterval(course);
+
 			if (ModelState.IsValid)
 			{
-				var identityRole = db.Roles.SingleOrDefault(r => r.Name == Role.Student);
-				var studentUsers = db.Users
-					.Where(u => u.Roles
-						.Select(r => r.RoleId)
-						.Contains(identityRole.Id))
-					.ToArray()
-					.Where(u => userIds.Contains(u.Id) || u.CourseId == course.Id);
+				// pick only selected students
+				studentUsers = studentUsers.Where(u => userIds.Contains(u.Id) || u.CourseId == course.Id).ToArray();
 
 				// TODO: Verification for removed users?
 				foreach (var u in studentUsers)
@@ -256,6 +262,7 @@ namespace LMS.Controllers
 				});
 			}
 
+			ViewBag.Users = studentUsers;
 			return PartialView(course);
 		}
 
@@ -615,13 +622,13 @@ namespace LMS.Controllers
 				ModelState.AddModelError(nameof(Course.StartDate), "Start datum måste vara mindre än slut datum.");
 
 			// check if activity time interval overlap any other activity from the same module
-			var set = db.Set<Course>().AsNoTracking();
-			var overlaps = set.Where(m => m.Id != model.Id && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
-			if (overlaps.Count() > 0)
-			{            
-				ModelState.AddModelError(nameof(Module.StartDate), "Tidsintervallet överlappar med en annan kurs.");
-				ModelState.AddModelError(nameof(Module.EndDate), "Tidsintervallet överlappar med en annan kurs.");
-			}
+			//var set = db.Set<Course>().AsNoTracking();
+			//var overlaps = set.Where(m => m.Id != model.Id && !(model.EndDate < m.StartDate || model.StartDate > m.EndDate));
+			//if (overlaps.Count() > 0)
+			//{            
+			//	ModelState.AddModelError(nameof(Module.StartDate), "Tidsintervallet överlappar med en annan kurs.");
+			//	ModelState.AddModelError(nameof(Module.EndDate), "Tidsintervallet överlappar med en annan kurs.");
+			//}
         }
 
 		private void ValidateTimeInterval(Module model)
@@ -651,9 +658,9 @@ namespace LMS.Controllers
 				ModelState.AddModelError(nameof(Module.StartDate), "Start datum måste vara mindre än slut datum.");
 
 			var parent = db.Modules.Find(model.ModuleId);
-			if (model.StartDate < parent.StartDate)
+			if (model.StartDate.Date < parent.StartDate)
 				ModelState.AddModelError(nameof(Module.StartDate), "Angivet start datum är tidigare än modulens start datum.");
-			if (model.EndDate > parent.EndDate)
+			if (model.EndDate.Date > parent.EndDate)
 				ModelState.AddModelError(nameof(Module.EndDate), "Angivet slut datum är senare än modulens slut datum.");
 
 			// check if activity time interval overlap any other activity from the same module
