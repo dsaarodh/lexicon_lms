@@ -410,7 +410,7 @@ namespace LMS.Migrations
 				}
 
 				var adminUser = userManager.FindByName(teacher.UserName);
-				userManager.AddToRole(adminUser.Id, "Teacher");
+				userManager.AddToRole(adminUser.Id, Role.Teacher);
 			}
 
 			context.SaveChanges();
