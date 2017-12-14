@@ -2,11 +2,14 @@
 @using System.Globalization
 @using System.Drawing;
 
+@{ 
+	var courseName = Model.Course?.Name;
+}
 
 @*<div id="spacer">-</div>*@
 <table class="schemaTbl" id="tbl">
     <tr>
-        <td colspan="3">@Model.Course.Name</td>
+        <td colspan="3">@courseName</td>
     </tr>
     <tr>
         <th class="svg-cell">Dag</th>
@@ -61,9 +64,10 @@
     }
     <tfoot>
         <tr>
-            <td colspan="2">
-                @Ajax.ActionLink("<< Föregående vecka", nameof(LMS.Controllers.HomeController.GetWeek), new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "prev" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default" })
-                @Ajax.ActionLink("Följande vecka >>", nameof(LMS.Controllers.HomeController.GetWeek), new { start = Model.WeekStartDate, end = Model.WeekEndDate, move = "next" }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
+            <td colspan="2" align="center">
+                @Ajax.ActionLink("<< Föregående vecka", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = Model.WeekStartDate.AddDays(-7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-left" })
+				@Ajax.ActionLink("Aktuell vecka", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = DateTime.Now }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default center" })
+                @Ajax.ActionLink("Följande vecka >>", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = Model.WeekStartDate.AddDays(7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
             </td>
         </tr>
     </tfoot>

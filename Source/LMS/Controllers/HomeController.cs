@@ -26,52 +26,10 @@ namespace LMS.Controllers
         [Authorize(Roles = Role.Teacher + "," + Role.Student)]
         public ActionResult Index()
         {
+			var vm = BuildScheduleViewModel(DateTime.Now);
+			vm.TreeView = TreeView();
 
-            var scheduleVM = new ScheduleViewModels() { Calendar = CultureInfo.CurrentCulture.Calendar };
-            var userId = User.Identity.GetUserId();
-            var courseId = db.Users.Find(userId).CourseId;
-
-            scheduleVM.Course = new Course();
-            if (!User.IsInRole(Role.Teacher))
-            {
-                scheduleVM.Course.Name = db.Courses.Where(co => courseId != null ? co.Id == courseId : false).Select(n => n.Name).FirstOrDefault().ToString();
-            }
-
-            scheduleVM.Days = new List<Day>();
-            scheduleVM.Activities = db.Activities
-                    .Where(a => a.Module.Course.Users.Any(u => u.Id == userId) && a.StartDate <= scheduleVM.WeekEndDate && a.EndDate >= scheduleVM.WeekStartDate)
-                    .ToArray();
-                
-            for (int i = 0; i < 7; i++)
-            {
-                Day day = new Day
-                {
-                    Date = scheduleVM.WeekStartDate.AddDays(i)
-                };
-            
-                if (courseId != null)
-                {
-                    day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
-                }
-                if (day.Modules != null)
-                {
-                    for (int j = 0; j < day.Modules.Count; j++)
-                    {
-                        day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
-                    }
-                }
-                scheduleVM.Days.Add(day);
-            }
-
-            if (!User.Identity.IsAuthenticated)
-            {
-                scheduleVM.TreeView = new TreeViewModel();
-                return View(scheduleVM);
-            }
-
-            scheduleVM.TreeView = TreeView();
-
-            return View(scheduleVM);
+            return View(vm);
         }
 
 		public ActionResult About()
@@ -123,6 +81,18 @@ namespace LMS.Controllers
             }
 
             return View(model);
+        }
+
+		public PartialViewResult Schedule(DateTime firstDay)
+        {
+			return PartialView("_Schedule", BuildScheduleViewModel(firstDay));
+        }
+
+		public string ColorShade(string color)
+        {
+            var c = System.Drawing.ColorTranslator.FromHtml(color);
+            System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1,  Math.Min(c.R - 50, 255), Math.Min(c.G - 50, 255), Math.Min(c.B - 50, 255));
+            return String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
         }
 
 #region Create
@@ -696,60 +666,40 @@ namespace LMS.Controllers
 			}
         }
 
-        public string ColorShade(string color)
-        {
-            var c = System.Drawing.ColorTranslator.FromHtml(color);
-            System.Drawing.Color darkColor = System.Drawing.Color.FromArgb(1,  Math.Min(c.R - 50, 255), Math.Min(c.G - 50, 255), Math.Min(c.B - 50, 255));
-            return String.Format("#{0:X2}{1:X2}{2:X2}", darkColor.R, darkColor.G, darkColor.B);
-        }
+		private ScheduleViewModels BuildScheduleViewModel(DateTime firstDay)
+		{
+			ScheduleViewModels scheduleVM = new ScheduleViewModels() { WeekStartDate = firstDay, Calendar = CultureInfo.CurrentCulture.Calendar };
 
-        public PartialViewResult GetWeek(DateTime start, DateTime end, string move)
-        {
-            ScheduleViewModels scheduleVM = new ScheduleViewModels();
-            var cal = System.Globalization.CultureInfo.CurrentCulture.Calendar;
-//            var newDate = cal.AddWeeks(DateTime.Now, scheduleVM.CurrentWeek);
+			var userId = User.Identity.GetUserId();
+			var courseId = db.Users.Find(userId).CourseId;
 
-			scheduleVM.WeekStartDate = move == "prev" ? start.AddDays(-7) : start.AddDays(7);
+			if (!User.IsInRole(Role.Teacher))
+				scheduleVM.Course = db.Courses.Find(courseId);
 
+			scheduleVM.Days = new List<Day>();
+			scheduleVM.Activities = db.Activities
+					.Where(a => a.Module.Course.Users.Any(u => u.Id == userId) && a.StartDate <= scheduleVM.WeekEndDate && a.EndDate >= scheduleVM.WeekStartDate)
+					.ToArray();
 
-            //var scheduleVM = new ScheduleViewModels();
-//            CultureInfo cultureInfo = new CultureInfo("sv-SE");
-            scheduleVM.Calendar = cal; //cultureInfo.Calendar;
+			for (int i = 0; i < 7; i++)
+			{
+				Day day = new Day { Date = scheduleVM.WeekStartDate.AddDays(i) };
 
-            var userId = User.Identity.GetUserId();
-            var courseId = db.Users.Find(userId).CourseId;
+				if (courseId != null)
+					day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
 
-            scheduleVM.Course = new Course();
-            if (!User.IsInRole(Role.Teacher))
-                scheduleVM.Course.Name = db.Courses.Where(co => co.Id == courseId).Select(n => n.Name).FirstOrDefault().ToString();
+				if (day.Modules != null)
+				{
+					for (int j = 0; j < day.Modules.Count; j++)
+					{
+						day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
+					}
+				}
 
-            scheduleVM.Days = new List<Day>();
-            scheduleVM.Activities = db.Activities
-                    .Where(a => a.Module.Course.Users.Any(u => u.Id == userId) && a.StartDate <= scheduleVM.WeekEndDate && a.EndDate >= scheduleVM.WeekStartDate)
-                    .ToArray();
+				scheduleVM.Days.Add(day);
+			}
 
-            for (int i = 0; i < 7; i++)
-            {
-                Day day = new Day { Date = scheduleVM.WeekStartDate.AddDays(i) };
-
-                if (courseId != null)
-                    day.Modules = db.Courses.Find(courseId).Modules.Where(c => c.StartDate.Day == day.Date.Day).ToList();
-
-                if (day.Modules != null)
-                {
-                    for (int j = 0; j < day.Modules.Count; j++)
-                    {
-                        day.Modules[j].Activities = day.Modules[j].Activities.Where(d => d.StartDate.Day == day.Date.Day).ToList();
-                    }
-                }
-
-                scheduleVM.Days.Add(day);
-            }
-
-            if (!User.Identity.IsAuthenticated)
-                return PartialView("_Schedule", scheduleVM);
-
-            return PartialView("_Schedule", scheduleVM);
-        }
+			return scheduleVM;
+		}
     }
 }
