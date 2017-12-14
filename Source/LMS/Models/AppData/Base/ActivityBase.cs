@@ -16,12 +16,12 @@ namespace LMS.Models.AppData.Base
         [Display(Name = "Beskrivning")]
         public string Description { get; set; }
 
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
 		[DataType(DataType.DateTime)]
         [Display(Name = "Startdatum")]
         public DateTime StartDate { get; set; }
 
-		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd hh:mm}")]
+		[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-dd HH:mm}")]
 		[DataType(DataType.DateTime)]
         [Display(Name = "Slutdatum")]
         public DateTime EndDate { get; set; }
