@@ -83,9 +83,9 @@ namespace LMS.Controllers
             return View(model);
         }
 
-		public PartialViewResult Schedule(DateTime firstDay)
+		public PartialViewResult Schedule(DateTime dayInWeek)
         {
-			return PartialView("_Schedule", BuildScheduleViewModel(firstDay));
+			return PartialView("_Schedule", BuildScheduleViewModel(dayInWeek));
         }
 
 		public string ColorShade(string color)
@@ -666,9 +666,9 @@ namespace LMS.Controllers
 			}
         }
 
-		private ScheduleViewModels BuildScheduleViewModel(DateTime firstDay)
+		private ScheduleViewModels BuildScheduleViewModel(DateTime dayInWeek)
 		{
-			ScheduleViewModels scheduleVM = new ScheduleViewModels() { WeekStartDate = firstDay, Calendar = CultureInfo.CurrentCulture.Calendar };
+			ScheduleViewModels scheduleVM = new ScheduleViewModels(dayInWeek);
 
 			var userId = User.Identity.GetUserId();
 			var courseId = db.Users.Find(userId).CourseId;

@@ -30,7 +30,7 @@
         var day = Model.WeekStartDate.AddDays(iDay);
         <tr>
             <td class="date">
-                @DateTimeFormatInfo.CurrentInfo.GetDayName(Model.FirstDayOfWeek.AddDays(iDay).DayOfWeek) @Model.FirstDayOfWeek.AddDays(iDay).ToShortDateString()
+                @DateTimeFormatInfo.CurrentInfo.GetDayName(Model.WeekStartDate.AddDays(iDay).DayOfWeek) @Model.WeekStartDate.AddDays(iDay).ToShortDateString()
             </td>
             <td style="padding: 0; position:relative;">
                 @foreach (var a in Model.Activities)
@@ -65,9 +65,9 @@
     <tfoot>
         <tr>
             <td colspan="2" align="center">
-                @Ajax.ActionLink("<< Föregående vecka", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = Model.WeekStartDate.AddDays(-7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-left" })
-				@Ajax.ActionLink("Aktuell vecka", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = DateTime.Now }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default center" })
-                @Ajax.ActionLink("Följande vecka >>", nameof(LMS.Controllers.HomeController.Schedule), new { firstDay = Model.WeekStartDate.AddDays(7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
+                @Ajax.ActionLink("<< Föregående vecka", nameof(LMS.Controllers.HomeController.Schedule), new { dayInWeek = Model.WeekStartDate.AddDays(-7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-left" })
+				@Ajax.ActionLink("Aktuell vecka", nameof(LMS.Controllers.HomeController.Schedule), new { dayInWeek = DateTime.Now }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default center" })
+                @Ajax.ActionLink("Följande vecka >>", nameof(LMS.Controllers.HomeController.Schedule), new { dayInWeek = Model.WeekStartDate.AddDays(7) }, new AjaxOptions { UpdateTargetId = "left" }, new { @class = "btn btn-sm btn-default pull-right" })
             </td>
         </tr>
     </tfoot>
