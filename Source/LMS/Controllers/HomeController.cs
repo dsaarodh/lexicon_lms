@@ -563,7 +563,7 @@ namespace LMS.Controllers
 					{
 						var cNode = new TreeViewNode
 							{
-								Text = c.Name,
+                                Text = c.Name,
 								CustomData = new { Type = nameof(Course), Id = c.Id, Action = Url.Action(nameof(CourseInfo), new { Id = c.Id }) }
 							};
 
